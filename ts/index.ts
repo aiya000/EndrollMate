@@ -2,20 +2,21 @@
 /// <reference path="./typings/jquery/jquery.d.ts"/>
 /// <reference path="./typings/ng-file-upload/ng-file-upload.d.ts"/>
 class BackgroundImageController {
-	public upload:  ng.angularFileUpload.IFileUploadConfig;
 	public bgImage: any;
 
 	/**
-	 * @param このクラスで使用するng.IHttpServiceオブジェクトを設定します
+	 * フォームで指定された画像を
+	 * {width: 100%, height: 100%}で背景に設定します
 	 */
-	constructor($upload: ng.angularFileUpload.IFileUploadConfig) {
-		this.upload = $upload;
-	}
-
 	public fileSelect($files: FileList) : void {
-		console.log("foo");
+		var file: Blob = <File>$files[0];
+		var fileReader = new FileReader();
+		fileReader.addEventListener("load", (e) => {
+			$("#backgroundImage").attr("src", fileReader.result);
+		});
+		fileReader.readAsDataURL(file);
 	}
 }
 
-let appEndrollMate = angular.module("appEndrollMate", []);
+let appEndrollMate = angular.module("appEndrollMate", ["ngFileUpload"]);
 appEndrollMate.controller("BackgroundImageController", [BackgroundImageController]);

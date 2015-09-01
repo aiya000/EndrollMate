@@ -15,9 +15,10 @@
   </head>
   <body>
 
+    <img id="backgroundImage" alt="background image"/>
     <form ng-controller="BackgroundImageController as bgCtrl" novalidate>
       バックグラウンドイメージを選択してください.<br>
-      <input type="file" name="backgroundImage" accept="image/*" ng-file-select="bgCtrl.fileSelect($files)"/>
+      <input type="file" accept="image/*" ngf-select="bgCtrl.fileSelect($files)"/>
     </form>
 
   </body>
