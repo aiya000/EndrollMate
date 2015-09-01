@@ -5,14 +5,15 @@ class BackgroundImageController {
 	public bgImage: any;
 
 	/**
-	 * フォームで指定された画像を
-	 * {width: 100%, height: 100%}で背景に設定します
+	 * フォームで指定された画像をbodyの背景に設定します
+	 * @param FileAPI(<input type="file"/>)で選択した1つのファイル
 	 */
 	public fileSelect($files: FileList) : void {
 		var file: Blob = <File>$files[0];
 		var fileReader = new FileReader();
 		fileReader.addEventListener("load", (e) => {
-			$("#backgroundImage").attr("src", fileReader.result);
+			var fileUrl: string = "url(" + fileReader.result + ")";
+			$("body").css("background-image", fileUrl);
 		});
 		fileReader.readAsDataURL(file);
 	}

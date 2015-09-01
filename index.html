@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <title></title>
+    <link rel="stylesheet" href="./css/index.css">
     <!--
     <script src="./js/bower_components/angular/angular.min.js"></script>
     <script src="./js/bower_components/jquery/dist/jquery.min.js"></script>
@@ -15,7 +16,6 @@
   </head>
   <body>
 
-    <img id="backgroundImage" alt="background image"/>
     <form ng-controller="BackgroundImageController as bgCtrl" novalidate>
       バックグラウンドイメージを選択してください.<br>
       <input type="file" accept="image/*" ngf-select="bgCtrl.fileSelect($files)"/>
