@@ -5,3 +5,13 @@ body {
     background-attachment: fixed;
     background-size: cover;
 }
+
+#input_form {
+    float: left;
+}
+
+#portrait {
+    width: 50%;
+    height: 50%;
+    float: right;
+}
