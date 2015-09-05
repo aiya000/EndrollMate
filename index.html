@@ -18,17 +18,20 @@
 
     <div id="input_form">
       <form ng-controller="MainController as ctrl" novalidate>
-        バックグラウンドイメージを選択してください.<br clear="all">
-        <input type="file" accept="image/*" ngf-select="ctrl.setBackgroundImage($files)"/><br clear="all">
+        バックグラウンドイメージを選択してください.<br>
+        <input type="file" accept="image/*" ngf-select="ctrl.setBackgroundImage($files)"/><br><br>
+
+        エンドロールに使用するテキストを選択してください.<br>
+        <input type="file" ngf-select="ctrl.setRollText($files)"/><br><br>
 
         画像を選択してください.<br>
-        <input type="file" accept="image/*" multiple ngf-select="ctrl.setPortraits($files)"/><br clear="all">
+        <input type="file" accept="image/*" multiple ngf-select="ctrl.setPortraits($files)"/><br><br>
 
         <input type="button" value="開始" ng-click="ctrl.startDrawingPortraits()"/>
       </form>
     </div>
 
-    <img id="portrait" alt="画像群">
+    <img id="portrait">
 
   </body>
 </html>

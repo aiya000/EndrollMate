@@ -7,6 +7,11 @@ class MainController {
 
 	/* --- --- --- private field --- --- --- */
 	/**
+	 * エンドロールで下から上へ流れる行のリスト
+	 */
+	private rollLines: string[]
+
+	/**
 	 * エンドロール中にフェードインアウトを
 	 * 繰り返して描画される画像のリスト
 	 */
@@ -26,7 +31,7 @@ class MainController {
 	/* --- --- --- public method --- --- --- */
 	/**
 	 * フォームで指定された画像をbodyの背景に設定します
-	 * @param FileAPI(<input type="file"/>)で選択した1つのファイル
+	 * @param $files 選択した1つの画像ファイル
 	 */
 	public setBackgroundImage($files: FileList) : void {
 		let file: File = $files[0];
@@ -37,24 +42,50 @@ class MainController {
 	}
 
 
-	/*
+	/**
+	 * エンドロールに使用するテキストファイルを設定します
+	 * @param $files エンドロールに使用する1つのテキストファイル
+	 */
+	public setRollText($files: FileList) : void {
+		let file: File = $files[0];
+		let fileReader = new FileReader();
+		let setRollLines: EventListener = e => {
+			this.rollLines = fileReader.result.split("\n");
+		};
+		fileReader.addEventListener("load", setRollLines);
+		fileReader.readAsText(file);
+	}
+
+
+	/**
 	 * エンドロール中に描画される画像のリストを設定します
-	 * @param エンドロール中に描画される画像のリスト
+	 * @param $files エンドロール中に描画される画像のリスト
 	 */
 	public setPortraits($files: FileList) : void {
 		this.portraits = $files;
 	}
 
 
-	/*
-	 * setPortraits(FileList)で選択した全ての画像を
-	 * フェードインとフェードアウトで描画します
+	/**
+	 * フォームで設定した項目を元にエンドロールを開始します。
+	 * フォームで未設定な項目がある場合はアラートを出力し、終了します。
 	 */
-	public startDrawingPortraits() : void {
+	public startEndRoll() : void {
 		if (this.portraits == null) {
 			alert("portraits was not selected");
 			return;
 		}
+		this.startDrawingPortraits();
+	}
+
+
+	/* --- --- --- private method --- --- --- */
+	/**
+	 * setPortraits(FileList)で選択した全ての画像を
+	 * フェードインとフェードアウトで描画します
+	 */
+	private startDrawingPortraits() : void {
+		//TODO: assert this.portraits == null
 		//TODO: drawingPortraitsを thisを保持しつつsubroutineにしたい
 		/**
 		 * portraitsのうちdrawnPortraitNum番目の画像をDRAW_MILLI_SECミリ秒描画します。
@@ -66,7 +97,7 @@ class MainController {
 			let fadeMillis: number = this.DRAW_MILLI_SEC / 4.0;
 			let viewMillis: number = this.DRAW_MILLI_SEC - fadeMillis * 2.0;
 			let drawingPortraits: EventListener = e => {
-				$("#portrait").attr("src", fileReader.result);
+				$("#portrait").attr({src: fileReader.result, alt: "画像群"});
 				$("#portrait").fadeIn(fadeMillis, () => {
 					$("#portrait").delay(viewMillis).fadeOut(fadeMillis);
 				});
