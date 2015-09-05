@@ -1,8 +1,17 @@
 /// <reference path="./typings/angularjs/angular.d.ts"/>
 /// <reference path="./typings/jquery/jquery.d.ts"/>
 /// <reference path="./typings/ng-file-upload/ng-file-upload.d.ts"/>
+/// <reference path="./Maybe.ts"/>
+
+/**
+ * @classdesc DocumentRoot/index.html <body>配下のコントロール
+ */
 class MainController {
 	/* --- --- --- private const field --- --- --- */
+	/**
+	 * エンドロール中の1つの画像の描画にかけるミリ秒。
+	 * これはフェードインとフェードアウトにかける時間を含みます。
+	 */
 	private DRAW_MILLI_SEC: number = 4000;
 
 	/* --- --- --- private field --- --- --- */
@@ -18,20 +27,21 @@ class MainController {
 	private portraits: FileList;
 
 	/**
-	 * 現在の描画している画像番目
+	 * エンドロールで現在描画している画像の番目
 	 */
 	private drawnPortraitNum: number = 0;
 
 	/* --- --- --- public constructor --- --- --- */
 	/**
 	 * 使用するAngularJSのオブジェクトを受け取ります
+	 * @constructor
 	 */
 	constructor(private $interval: ng.IIntervalService) {}
 
 	/* --- --- --- public method --- --- --- */
 	/**
 	 * フォームで指定された画像をbodyの背景に設定します
-	 * @param $files 選択した1つの画像ファイル
+	 * @param {FileList} $files 選択した1つの画像ファイル
 	 */
 	public setBackgroundImage($files: FileList) : void {
 		let file: File = $files[0];
@@ -44,7 +54,7 @@ class MainController {
 
 	/**
 	 * エンドロールに使用するテキストファイルを設定します
-	 * @param $files エンドロールに使用する1つのテキストファイル
+	 * @param {FileList} $files エンドロールに使用する1つのテキストファイル
 	 */
 	public setRollText($files: FileList) : void {
 		let file: File = $files[0];
@@ -59,7 +69,7 @@ class MainController {
 
 	/**
 	 * エンドロール中に描画される画像のリストを設定します
-	 * @param $files エンドロール中に描画される画像のリスト
+	 * @param {FileList} $files エンドロール中に描画される画像のリスト
 	 */
 	public setPortraits($files: FileList) : void {
 		this.portraits = $files;
@@ -71,8 +81,9 @@ class MainController {
 	 * フォームで未設定な項目がある場合はアラートを出力し、終了します。
 	 */
 	public startEndRoll() : void {
-		if (this.portraits == null) {
-			alert("portraits was not selected");
+		let invalidState: Maybe.Data<string> = this.findInvalidStatus();
+		if (invalidState.hasValue()) {
+			alert(invalidState.getValue());
 			return;
 		}
 		this.startDrawingPortraits();
@@ -80,6 +91,21 @@ class MainController {
 
 
 	/* --- --- --- private method --- --- --- */
+	/**
+	 * エンドロールの開始条件が整っているかを検査します。
+	 * 各inputフォームが検査されます。
+	 * @return {Maybe.Data<string>} 無効な状態があればMaybeで包まれたエラーメッセージ,もしくはnothing
+	 */
+	private findInvalidStatus() : Maybe.Data<string> {
+		//TODO: check image of body background
+		if (this.rollLines == null) {
+			return Maybe.just("the text was not selected");
+		} else if (this.portraits == null) {
+			return Maybe.just("the portraits were not selected");
+		}
+		return Maybe.nothing;
+	}
+
 	/**
 	 * setPortraits(FileList)で選択した全ての画像を
 	 * フェードインとフェードアウトで描画します
