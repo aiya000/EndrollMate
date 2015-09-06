@@ -10,14 +10,14 @@
     <script src="./js/bower_components/ng-file-upload/ng-file-upload.min.js"></script>
     -->
     <script src="./js/bower_components/angular/angular.js"></script>
-    <script src="./js/bower_components/ng-file-upload/ng-file-upload.js"></script>
     <script src="./js/bower_components/jquery/dist/jquery.js"></script>
+    <script src="./js/bower_components/ng-file-upload/ng-file-upload.js"></script>
     <script src="./js/index.js"></script>
   </head>
-  <body>
+  <body ng-controller="MainController as ctrl">
 
     <div id="input_form">
-      <form ng-controller="MainController as ctrl" novalidate>
+      <form novalidate>
         バックグラウンドイメージを選択してください.<br>
         <input type="file" accept="image/*" ngf-select="ctrl.setBackgroundImage($files)"/><br><br>
 
@@ -31,7 +31,8 @@
       </form>
     </div>
 
-    <img id="portrait">
+    <img id="portrait" src="{{portraitSrc}}" alt="{{portraitAlt}}"><br>
 
+    <p>{{endMessage}}</p>
   </body>
 </html>

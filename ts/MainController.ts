@@ -1,5 +1,6 @@
 /// <reference path="./typings/jquery/jquery.d.ts"/>
 /// <reference path="./typings/ng-file-upload/ng-file-upload.d.ts"/>
+/// <reference path="./MainScope.ts"/>
 /// <reference path="./Maybe.ts"/>
 
 /**
@@ -17,7 +18,7 @@ class MainController {
 	/**
 	 * エンドロールで下から上へ流れる行のリスト
 	 */
-	private rollLines: string[]
+	private rollLines: string[];
 
 	/**
 	 * エンドロール中にフェードインアウトを
@@ -26,16 +27,17 @@ class MainController {
 	private portraits: FileList;
 
 	/**
-	 * エンドロールで現在描画している画像の番目
+	 * TODO: 書く
 	 */
-	private drawnPortraitNum: number = 0;
+	private endrollStarted: boolean = false;
 
 	/* --- --- --- public constructor --- --- --- */
 	/**
 	 * 使用するAngularJSのオブジェクトを受け取ります
 	 * @constructor
 	 */
-	constructor(private $interval: ng.IIntervalService) {}
+	constructor( private $scope: MainScope
+	           , private $interval: ng.IIntervalService) {}
 
 	/* --- --- --- public method --- --- --- */
 	/**
@@ -84,6 +86,9 @@ class MainController {
 		if (invalidState.hasValue()) {
 			alert(invalidState.getValue());
 			return;
+		} else if (this.endrollStarted) {
+			alert("endroll has already started");
+			return;
 		}
 		this.startDrawingPortraits();
 	}
@@ -106,32 +111,45 @@ class MainController {
 	}
 
 	/**
-	 * setPortraits(FileList)で選択した全ての画像を
-	 * フェードインとフェードアウトで描画します
+	 * setPortraits(FileList)で選択した全ての画像を描画します。
+	 * 画像の描画には強調効果としてフェードイン, フェードアウトが使用されます。
 	 */
 	private startDrawingPortraits() : void {
 		//TODO: assert this.portraits == null
-		//TODO: drawingPortraitsを thisを保持しつつsubroutineにしたい
-		/**
-		 * portraitsのうちdrawnPortraitNum番目の画像をDRAW_MILLI_SECミリ秒描画します。
-		 * 画像の描画には強調効果としてフェードイン, フェードアウトが使用されます。
-		 */
-		let drawingPortraits: () => any = () => {
-			let portrait: File     = this.portraits[this.drawnPortraitNum++];
-			let fileReader         = new FileReader();
-			let fadeMillis: number = this.DRAW_MILLI_SEC / 4.0;
-			let viewMillis: number = this.DRAW_MILLI_SEC - fadeMillis * 2.0;
-			let drawingPortraits: EventListener = e => {
-				$("#portrait").attr({src: fileReader.result, alt: "画像群"});
-				$("#portrait").fadeIn(fadeMillis, () => {
-					$("#portrait").delay(viewMillis).fadeOut(fadeMillis);
-				});
+		//TODO: drawPortraitsを thisを保持しつつsubroutineにしたい
+
+		// portraitsのうちdrawnPortraitNum番目の画像をDRAW_MILLI_SECミリ秒描画します。
+		let fadeMillis: number       = this.DRAW_MILLI_SEC / 4.0;
+		let viewMillis: number       = this.DRAW_MILLI_SEC - fadeMillis * 2.0;
+		let drawnPortraitNum: number = 0;
+		let drawPortraits = () => {
+			let portrait: File  = this.portraits[drawnPortraitNum++];
+			this.drawAPortrait(portrait, fadeMillis, viewMillis);
+			let endrollFinished = drawnPortraitNum == this.portraits.length;
+			if (endrollFinished) {
+				this.$interval.cancel(undefined);
+				this.$scope.endMessage = "Endroll Finished";
 			}
-			fileReader.addEventListener("load", drawingPortraits);
-			fileReader.readAsDataURL(portrait);
-			return undefined;
 		}
-		this.$interval(drawingPortraits, this.DRAW_MILLI_SEC, this.portraits.length);
-		//TODO: if drawnPortraitNum == this.portraits.length then clear somethings
+		this.$scope.portraitAlt = "endroll-portrait";
+		this.$interval(drawPortraits, this.DRAW_MILLI_SEC, this.portraits.length);
+	}
+
+	/**
+	 * TODO: 書く
+	 * @param {File} foo
+	 * @param {number} bar
+	 * @param {number} baz
+	 */
+	private drawAPortrait(portrait: File, fadeMillis: number, viewMillis: number) : void {
+		let fileReader = new FileReader();
+		let drawPortraits: EventListener = e => {
+			this.$scope.portraitSrc = fileReader.result;
+			$("#portrait").fadeIn(fadeMillis, () => {
+				$("#portrait").delay(viewMillis).fadeOut(fadeMillis);
+			});
+		}
+		fileReader.addEventListener("load", drawPortraits);
+		fileReader.readAsDataURL(portrait);
 	}
 }
