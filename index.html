@@ -16,7 +16,7 @@
   </head>
   <body ng-controller="MainController as ctrl">
 
-    <div id="input_form">
+    <div id="input_form" ng-show="formVisible">
       <form novalidate>
         バックグラウンドイメージを選択してください.<br>
         <input type="file" accept="image/*" ngf-select="ctrl.setBackgroundImage($files)"/><br><br>

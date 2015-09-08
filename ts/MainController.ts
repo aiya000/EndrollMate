@@ -12,9 +12,26 @@ class MainController {
 	 * エンドロール中の1つの画像の描画にかけるミリ秒。
 	 * これはフェードインとフェードアウトにかける時間を含みます。
 	 */
-	private DRAW_MILLI_SEC: number = 4000;
+	//private DRAW_MILLI_SEC: number = 4000;
+	private DRAW_MILLI_SEC: number = 1500;
 
 	/* --- --- --- private field --- --- --- */
+
+	/**
+	 * TODO: 書く
+	 */
+	private $scope: MainScope;
+
+	/**
+	 * TODO: 書く
+	 */
+	private $interval: ng.IIntervalService;
+
+	/**
+	 * TODO: 書く
+	 */
+	private $q: ng.IQService;
+
 	/**
 	 * エンドロールで下から上へ流れる行のリスト
 	 */
@@ -36,8 +53,12 @@ class MainController {
 	 * 使用するAngularJSのオブジェクトを受け取ります
 	 * @constructor
 	 */
-	constructor( private $scope: MainScope
-	           , private $interval: ng.IIntervalService) {}
+	constructor($scope: MainScope, $interval: ng.IIntervalService, $q: ng.IQService) {
+		this.$scope             = $scope;
+		this.$interval          = $interval;
+		this.$q                 = $q;
+		this.$scope.formVisible = true;
+	}
 
 	/* --- --- --- public method --- --- --- */
 	/**
@@ -110,6 +131,7 @@ class MainController {
 		return Maybe.nothing;
 	}
 
+
 	/**
 	 * setPortraits(FileList)で選択した全ての画像を描画します。
 	 * 画像の描画には強調効果としてフェードイン, フェードアウトが使用されます。
@@ -118,22 +140,20 @@ class MainController {
 		//TODO: assert this.portraits == null
 		//TODO: drawPortraitsを thisを保持しつつsubroutineにしたい
 
+		this.$scope.formVisible = false;
+
 		// portraitsのうちdrawnPortraitNum番目の画像をDRAW_MILLI_SECミリ秒描画します。
 		let fadeMillis: number       = this.DRAW_MILLI_SEC / 4.0;
 		let viewMillis: number       = this.DRAW_MILLI_SEC - fadeMillis * 2.0;
 		let drawnPortraitNum: number = 0;
-		let drawPortraits = () => {
-			let portrait: File  = this.portraits[drawnPortraitNum++];
-			this.drawAPortrait(portrait, fadeMillis, viewMillis);
-			let endrollFinished = drawnPortraitNum == this.portraits.length;
-			if (endrollFinished) {
-				this.$interval.cancel(undefined);
-				this.$scope.endMessage = "Endroll Finished";
-			}
-		}
-		this.$scope.portraitAlt = "endroll-portrait";
+		let drawPortraits: Function  = () => this.drawAPortrait(this.portraits[drawnPortraitNum++], fadeMillis, viewMillis);
+		this.$scope.portraitAlt      = "endroll-portrait";
+		//this.$interval(drawPortraits, this.DRAW_MILLI_SEC);
 		this.$interval(drawPortraits, this.DRAW_MILLI_SEC, this.portraits.length);
+		//TODO: when endroll finished, do notify by some method
+		//this.$scope.endMessage = "Endroll Finished";
 	}
+
 
 	/**
 	 * TODO: 書く
