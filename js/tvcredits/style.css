@@ -1,0 +1,17 @@
+#highlights {
+    border: #000 1px solid;
+    overflow: hidden;
+    width: 50%;
+    margin: 0 auto;
+}
+
+#credits {
+    border: #000 1px solid;
+    overflow: hidden;
+    width: 50%;
+    margin: 50px auto;
+}
+
+#credits ul {
+    list-style: none;
+}

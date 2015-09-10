@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>	
+	<script src="http://code.jquery.com/jquery-latest.js"></script>
+	<script src="tvcredits.jquery.min.js"></script>
+	<meta charset=utf-8 />
+    <link href="style.css" rel="stylesheet">
+	<title>Demo</title>
+</head>
+<body>
+	<div id="highlights">
+		<ul>
+			<li>Mussum ipsum cacilds, vidis litro abertis. Consetis adipiscings elitis.</li>
+			<li>Pra lá , depois divoltis porris, paradis. Paisis, filhis, espiritis santis.</li>
+			<li>Mé faiz elementum girarzis, nisi eros vermeio, in elementis mé pra quem é amistosis quis leo.</li>
+			<li>Manduma pindureta quium dia nois paga.</li>
+			<li>Sapien in monti palavris qui num significa nadis i pareci latim. </li>
+			<li>Interessantiss quisso pudia ce receita de bolis, mais bolis eu num gostis.</li>
+		</ul>  
+	</div> 
+
+
+	<div id="credits">
+		<ul>
+			<li>Lorene Nichols</li>
+			<li>Ed Figueroa</li>
+			<li>Sue Klein</li>
+			<li>Sharon Warren</li>
+			<li>Marta Maldonado</li>
+			<li>Manuel Flowers</li>
+			<li>Lila Chambers</li>
+			<li>Yolanda Haynes</li>
+			<li>Alfonso Lynch</li>
+			<li>Janie Reese</li>
+		</ul>
+	</div>
+
+</body>
+<script>
+	$("#highlights").tvCredits({
+		direction: 'left',
+		speed: 50000,
+	});
+	$("#credits").tvCredits({
+		height: 100,
+		speed: 9000	
+	});
+</script>
+</html>

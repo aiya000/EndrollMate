@@ -10,6 +10,10 @@ body {
     float: left;
 }
 
+#credits {
+    width: 50%;
+}
+
 #portrait {
     width: 50%;
     height: 50%;

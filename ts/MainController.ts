@@ -1,4 +1,5 @@
 /// <reference path="./typings/jquery/jquery.d.ts"/>
+/// <reference path="./typings/jquery.tvcredits/jquery.tvcredits.d.ts"/>
 /// <reference path="./typings/ng-file-upload/ng-file-upload.d.ts"/>
 /// <reference path="./MainScope.ts"/>
 /// <reference path="./Maybe.ts"/>
@@ -15,6 +16,11 @@ class MainController {
 	//private DRAW_MILLI_SEC: number = 4000;
 	private DRAW_MILLI_SEC: number = 1500;
 
+	/**
+	 * TODO: 書く
+	 */
+	private RISE_SPEED: number = 4000;
+
 	/* --- --- --- private field --- --- --- */
 
 	/**
@@ -30,12 +36,12 @@ class MainController {
 	/**
 	 * TODO: 書く
 	 */
-	private $q: ng.IQService;
+	private $window: ng.IWindowService;
 
 	/**
 	 * エンドロールで下から上へ流れる行のリスト
 	 */
-	private rollLines: string[];
+	private creditLines: string[];
 
 	/**
 	 * エンドロール中にフェードインアウトを
@@ -53,10 +59,10 @@ class MainController {
 	 * 使用するAngularJSのオブジェクトを受け取ります
 	 * @constructor
 	 */
-	constructor($scope: MainScope, $interval: ng.IIntervalService, $q: ng.IQService) {
+	constructor($scope: MainScope, $interval: ng.IIntervalService, $window: ng.IWindowService) {
 		this.$scope             = $scope;
 		this.$interval          = $interval;
-		this.$q                 = $q;
+		this.$window            = $window;
 		this.$scope.formVisible = true;
 	}
 
@@ -82,7 +88,7 @@ class MainController {
 		let file: File = $files[0];
 		let fileReader = new FileReader();
 		let setRollLines: EventListener = e => {
-			this.rollLines = fileReader.result.split("\n");
+			this.creditLines = fileReader.result.split("\n");
 		};
 		fileReader.addEventListener("load", setRollLines);
 		fileReader.readAsText(file);
@@ -112,6 +118,7 @@ class MainController {
 			return;
 		}
 		this.startDrawingPortraits();
+		this.startRisingCreditLines();
 	}
 
 
@@ -123,7 +130,7 @@ class MainController {
 	 */
 	private findInvalidStatus() : Maybe.Data<string> {
 		//TODO: check image of body background
-		if (this.rollLines == null) {
+		if (this.creditLines == null) {
 			return Maybe.just("the text was not selected");
 		} else if (this.portraits == null) {
 			return Maybe.just("the portraits were not selected");
@@ -171,5 +178,24 @@ class MainController {
 		}
 		fileReader.addEventListener("load", drawPortraits);
 		fileReader.readAsDataURL(portrait);
+	}
+
+
+	/**
+	 * TODO: 書く
+	 */
+	private startRisingCreditLines() {
+		//let creditItems = this.creditLines
+		//                      .map((x,i) => "<li>" + x + "</li>")
+		//                      .join("");
+		//this.$scope.creditLines = "<ul>" + creditItems + "</ul>";
+
+		$("#credits").tvCredits({
+			  height   : this.$window.innerHeight
+			, speed    : this.RISE_SPEED
+			, complete : () => {
+				$("#credits").fadeOut();
+			}
+		});
 	}
 }
