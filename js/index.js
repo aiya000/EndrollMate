@@ -106,12 +106,11 @@ var MainController = (function () {
          * エンドロール中の1つの画像の描画にかけるミリ秒。
          * これはフェードインとフェードアウトにかける時間を含みます。
          */
-        //private DRAW_MILLI_SEC: number = 4000;
-        this.DRAW_MILLI_SEC = 1500;
+        this.DRAW_MILLI_SEC = 4000;
         /**
          * TODO: 書く
          */
-        this.RISE_SPEED = 4000;
+        this.RISE_SPEED = 100000;
         /**
          * TODO: 書く
          */
@@ -119,7 +118,7 @@ var MainController = (function () {
         this.$scope = $scope;
         this.$interval = $interval;
         this.$window = $window;
-        this.$scope.formVisible = true;
+        this.$scope.endrollStarted = true;
     }
     /* --- --- --- public method --- --- --- */
     /**
@@ -195,7 +194,7 @@ var MainController = (function () {
         //TODO: assert this.portraits == null
         //TODO: drawPortraitsを thisを保持しつつsubroutineにしたい
         var _this = this;
-        this.$scope.formVisible = false;
+        this.$scope.endrollStarted = false;
         // portraitsのうちdrawnPortraitNum番目の画像をDRAW_MILLI_SECミリ秒描画します。
         var fadeMillis = this.DRAW_MILLI_SEC / 4.0;
         var viewMillis = this.DRAW_MILLI_SEC - fadeMillis * 2.0;
@@ -233,13 +232,11 @@ var MainController = (function () {
         //                      .map((x,i) => "<li>" + x + "</li>")
         //                      .join("");
         //this.$scope.creditLines = "<ul>" + creditItems + "</ul>";
+        $("#credits").css("margin-top", -this.$window.innerHeight * 2.0);
         $("#credits").tvCredits({
-            height: this.$window.innerHeight,
+            height: this.$window.innerHeight * 4.0,
             speed: this.RISE_SPEED,
-            complete: function () {
-                $("#credits").text("");
-                $("#credits").fadeOut();
-            }
+            complete: function () { return $("#credits").text(""); }
         });
     };
     return MainController;

@@ -13,13 +13,12 @@ class MainController {
 	 * エンドロール中の1つの画像の描画にかけるミリ秒。
 	 * これはフェードインとフェードアウトにかける時間を含みます。
 	 */
-	//private DRAW_MILLI_SEC: number = 4000;
-	private DRAW_MILLI_SEC: number = 1500;
+	private DRAW_MILLI_SEC: number = 4000;
 
 	/**
 	 * TODO: 書く
 	 */
-	private RISE_SPEED: number = 4000;
+	private RISE_SPEED: number = 100000;
 
 	/* --- --- --- private field --- --- --- */
 
@@ -63,7 +62,7 @@ class MainController {
 		this.$scope             = $scope;
 		this.$interval          = $interval;
 		this.$window            = $window;
-		this.$scope.formVisible = true;
+		this.$scope.endrollStarted = true;
 	}
 
 	/* --- --- --- public method --- --- --- */
@@ -147,7 +146,7 @@ class MainController {
 		//TODO: assert this.portraits == null
 		//TODO: drawPortraitsを thisを保持しつつsubroutineにしたい
 
-		this.$scope.formVisible = false;
+		this.$scope.endrollStarted = false;
 
 		// portraitsのうちdrawnPortraitNum番目の画像をDRAW_MILLI_SECミリ秒描画します。
 		let fadeMillis: number       = this.DRAW_MILLI_SEC / 4.0;
@@ -190,12 +189,11 @@ class MainController {
 		//                      .join("");
 		//this.$scope.creditLines = "<ul>" + creditItems + "</ul>";
 
+		$("#credits").css("margin-top", -this.$window.innerHeight * 2.0);
 		$("#credits").tvCredits({
-			  height   : this.$window.innerHeight
+			  height   : this.$window.innerHeight * 4.0
 			, speed    : this.RISE_SPEED
-			, complete : () => {
-				$("#credits").fadeOut();
-			}
+			, complete : () => $("#credits").text("")
 		});
 	}
 }

@@ -1,6 +1,6 @@
 /// <reference path="./typings/angularjs/angular.d.ts"/>
 interface MainScope extends ng.IScope {
-	formVisible: boolean;
+	endrollStarted: boolean;
 	creditLines: string;
 	portraitSrc: string;
 	portraitAlt: string;

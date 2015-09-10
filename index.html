@@ -18,7 +18,7 @@
   </head>
   <body ng-controller="MainController as ctrl">
 
-    <div id="input_form" ng-show="formVisible">
+    <div id="input_form" ng-show="endrollStarted">
       <form novalidate>
         バックグラウンドイメージを選択してください.<br>
         <input type="file" accept="image/*" ngf-select="ctrl.setBackgroundImage($files)"/><br><br>
@@ -34,7 +34,7 @@
     </div>
 
     <!--<div id="credits">{{creditLines}}</div>-->
-    <div id="credits">
+    <div id="credits" ng-hide="endrollStarted">
       <ul>
         <li>foo</li>
         <li>bar</li>
