@@ -33,47 +33,14 @@
       </form>
     </div>
 
-    <!--<div id="credits">{{creditLines}}</div>-->
     <div id="credits" ng-hide="endrollStarted">
       <ul>
-        <li>foo</li>
-        <li>bar</li>
-        <li>baz</li>
-        <li>foo</li>
-        <li>bar</li>
-        <li>baz</li>
-        <li>foo</li>
-        <li>bar</li>
-        <li>baz</li>
-        <li>foo</li>
-        <li>bar</li>
-        <li>baz</li>
-        <li>foo</li>
-        <li>bar</li>
-        <li>baz</li>
-        <li>foo</li>
-        <li>bar</li>
-        <li>baz</li>
-        <li>foo</li>
-        <li>bar</li>
-        <li>baz</li>
-        <li>foo</li>
-        <li>bar</li>
-        <li>baz</li>
-        <li>foo</li>
-        <li>bar</li>
-        <li>baz</li>
-        <li>foo</li>
-        <li>bar</li>
-        <li>baz</li>
-        <li>foo</li>
-        <li>bar</li>
-        <li>baz</li>
+        <li ng-repeat="creditLine in creditLines track by $index">{{ creditLine }}</li>
       </ul>
     </div>
 
-    <img id="portrait" src="{{portraitSrc}}" alt="{{portraitAlt}}"><br>
+    <img id="portrait" src="{{ portraitSrc }}" alt="{{ portraitAlt }}"><br>
 
-    <p>{{endMessage}}</p>
+    <p>{{ endMessage }}</p>
   </body>
 </html>

@@ -40,7 +40,7 @@ class MainController {
 	/**
 	 * エンドロールで下から上へ流れる行のリスト
 	 */
-	private creditLines: string[];
+	//private creditLines: string[];
 
 	/**
 	 * エンドロール中にフェードインアウトを
@@ -87,7 +87,7 @@ class MainController {
 		let file: File = $files[0];
 		let fileReader = new FileReader();
 		let setRollLines: EventListener = e => {
-			this.creditLines = fileReader.result.split("\n");
+			this.$scope.creditLines = fileReader.result.split("\n");
 		};
 		fileReader.addEventListener("load", setRollLines);
 		fileReader.readAsText(file);
@@ -118,6 +118,8 @@ class MainController {
 		}
 		this.startDrawingPortraits();
 		this.startRisingCreditLines();
+		//TODO: when endroll finished, do notify by some method
+		//this.$scope.endMessage = "Endroll Finished";
 	}
 
 
@@ -129,7 +131,7 @@ class MainController {
 	 */
 	private findInvalidStatus() : Maybe.Data<string> {
 		//TODO: check image of body background
-		if (this.creditLines == null) {
+		if (this.$scope.creditLines == null) {
 			return Maybe.just("the text was not selected");
 		} else if (this.portraits == null) {
 			return Maybe.just("the portraits were not selected");
@@ -151,13 +153,10 @@ class MainController {
 		// portraitsのうちdrawnPortraitNum番目の画像をDRAW_MILLI_SECミリ秒描画します。
 		let fadeMillis: number       = this.DRAW_MILLI_SEC / 4.0;
 		let viewMillis: number       = this.DRAW_MILLI_SEC - fadeMillis * 2.0;
-		let drawnPortraitNum: number = 0;
+		let drawnPortraitNum: number = 0;  // 描画済みの画像の数
 		let drawPortraits: Function  = () => this.drawAPortrait(this.portraits[drawnPortraitNum++], fadeMillis, viewMillis);
 		this.$scope.portraitAlt      = "endroll-portrait";
-		//this.$interval(drawPortraits, this.DRAW_MILLI_SEC);
 		this.$interval(drawPortraits, this.DRAW_MILLI_SEC, this.portraits.length);
-		//TODO: when endroll finished, do notify by some method
-		//this.$scope.endMessage = "Endroll Finished";
 	}
 
 
@@ -184,11 +183,6 @@ class MainController {
 	 * TODO: 書く
 	 */
 	private startRisingCreditLines() {
-		//let creditItems = this.creditLines
-		//                      .map((x,i) => "<li>" + x + "</li>")
-		//                      .join("");
-		//this.$scope.creditLines = "<ul>" + creditItems + "</ul>";
-
 		$("#credits").css("margin-top", -this.$window.innerHeight * 2.0);
 		$("#credits").tvCredits({
 			  height   : this.$window.innerHeight * 4.0
