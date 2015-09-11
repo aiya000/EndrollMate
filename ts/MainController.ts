@@ -9,10 +9,6 @@
  */
 class MainController {
 	/* --- --- --- private const field --- --- --- */
-	/**
-	 * エンドロール中の1つの画像の描画にかけるミリ秒。
-	 * これはフェードインとフェードアウトにかける時間を含みます。
-	 */
 	private DRAW_MILLI_SEC: number = 4000;
 
 	/**
@@ -20,8 +16,8 @@ class MainController {
 	 */
 	private RISE_SPEED: number = 100000;
 
-	/* --- --- --- private field --- --- --- */
 
+	/* --- --- --- private field --- --- --- */
 	/**
 	 * TODO: 書く
 	 */
@@ -53,6 +49,7 @@ class MainController {
 	 */
 	private endrollStarted: boolean = false;
 
+
 	/* --- --- --- public constructor --- --- --- */
 	/**
 	 * 使用するAngularJSのオブジェクトを受け取ります
@@ -64,6 +61,7 @@ class MainController {
 		this.$window            = $window;
 		this.$scope.endrollStarted = true;
 	}
+
 
 	/* --- --- --- public method --- --- --- */
 	/**
@@ -83,7 +81,7 @@ class MainController {
 	 * エンドロールに使用するテキストファイルを設定します
 	 * @param {FileList} $files エンドロールに使用する1つのテキストファイル
 	 */
-	public setRollText($files: FileList) : void {
+	public setCreditText($files: FileList) : void {
 		let file: File = $files[0];
 		let fileReader = new FileReader();
 		let setRollLines: EventListener = e => {
