@@ -22,6 +22,10 @@ body {
     float: left;
 }
 
+#credits ul {
+    list-style: none;
+}
+
 #portrait {
     width: 50%;
     height: 50%;

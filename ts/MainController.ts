@@ -47,11 +47,14 @@ class MainController {
 	 * @constructor
 	 */
 	constructor($scope: MainScope, $interval: ng.IIntervalService, $window: ng.IWindowService) {
-		this.$scope                    = $scope;
-		this.$interval                 = $interval;
-		this.$window                   = $window;
-		this.$scope.creditsRiseSpeed   = 4000;    // デフォルト値
-		this.$scope.aPortraitDrawSpeed = 100000;  // デフォルト値
+		// モジュールの設定
+		this.$scope    = $scope;
+		this.$interval = $interval;
+		this.$window   = $window;
+		// 初期値の設定
+		this.$scope.creditsRiseSpeed   = 20000;
+		this.$scope.aPortraitDrawSpeed = 4000;
+		this.$scope.creditsTextColor   = "Black";
 		this.$scope.endrollStarted     = true;
 	}
 
@@ -174,7 +177,10 @@ class MainController {
 	 * TODO: 書く
 	 */
 	private startRisingCreditLines() {
-		$("#credits").css("margin-top", -this.$window.innerHeight * 2.0);
+		$("#credits").css({
+			  "margin-top" : -this.$window.innerHeight * 2.0
+			, "color"      :  this.$scope.creditsTextColor
+		});
 		$("#credits").tvCredits({
 			  height   : this.$window.innerHeight * 4.0
 			, speed    : this.$scope.creditsRiseSpeed

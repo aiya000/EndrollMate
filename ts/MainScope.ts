@@ -9,6 +9,16 @@ interface MainScope extends ng.IScope {
 	creditsRiseSpeed: number;
 
 	/**
+	 * エンドロールテキストの内容を格納します。
+	 */
+	creditLines: string[];
+
+	/**
+	 * TODO: 書く
+	 */
+	creditsTextColor: string;
+
+	/**
 	 * エンドロールピクチャ1つの描画にかけるミリ秒。
 	 * これはフェードインとフェードアウトにかける時間を含みます。
 	 */
@@ -19,11 +29,6 @@ interface MainScope extends ng.IScope {
 	 * ( 「開始」ボタンを押すとエンドロールが始まります )
 	 */
 	endrollStarted: boolean;
-
-	/**
-	 * エンドロールテキストの内容を格納します。
-	 */
-	creditLines: string[];
 
 	/**
 	 * エンドロールピクチャを
