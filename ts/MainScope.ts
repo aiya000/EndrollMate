@@ -1,20 +1,25 @@
+// エンドロール中にフェードインアウトを
+// 繰り返して描画される画像群を「エンドロールピクチャ」と呼称します。
+
+// エンドロール中に下から上へ流れていく
+// クレジットを「エンドロールクレジット」と呼称します。
+
 /// <reference path="./typings/angularjs/angular.d.ts"/>
+
 interface MainScope extends ng.IScope {
-	// TODO: "エンドロールテキスト" についての説明
-	// TODO: "エンドロールピクチャ" についての説明
 
 	/**
-	 * エンドロールテキストの流れのスピードです。
+	 * エンドロールクレジットの流れのスピードです。
 	 */
 	creditsRiseSpeed: number;
 
 	/**
-	 * エンドロールテキストの内容を格納します。
+	 * エンドロールクレジットの内容を格納します。
 	 */
 	creditLines: string[];
 
 	/**
-	 * TODO: 書く
+	 * エンドロールクレジットのフォントカラーを指定します。
 	 */
 	creditsTextColor: string;
 

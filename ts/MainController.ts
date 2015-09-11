@@ -10,35 +10,25 @@
 class MainController {
 	/* --- --- --- private field --- --- --- */
 	/**
-	 * TODO: 書く
+	 * index.htmlとの双方向データバインディングに使用されます。
 	 */
 	private $scope: MainScope;
 
 	/**
-	 * TODO: 書く
+	 * エンドロールピクチャの描画に使用されます。
 	 */
 	private $interval: ng.IIntervalService;
 
 	/**
-	 * TODO: 書く
+	 * エンドロールクレジットのパラメータ設定に使用されます。
 	 */
 	private $window: ng.IWindowService;
 
 	/**
-	 * エンドロールで下から上へ流れる行のリスト
-	 */
-	//private creditLines: string[];
-
-	/**
-	 * エンドロール中にフェードインアウトを
-	 * 繰り返して描画される画像のリスト
+	 * input_formのngf-selectにて
+	 * エンドロールピクチャが格納されます。
 	 */
 	private portraits: FileList;
-
-	/**
-	 * TODO: 書く
-	 */
-	private endrollStarted: boolean = false;
 
 
 	/* --- --- --- public constructor --- --- --- */
@@ -106,7 +96,7 @@ class MainController {
 		if (invalidState.hasValue()) {
 			alert(invalidState.getValue());
 			return;
-		} else if (this.endrollStarted) {
+		} else if (this.$scope.endrollStarted) {
 			alert("endroll has already started");
 			return;
 		}
@@ -125,6 +115,7 @@ class MainController {
 	 */
 	private findInvalidStatus() : Maybe.Data<string> {
 		//TODO: check image of body background
+		console.log($("body").css("background-image"));
 		if (this.$scope.creditLines == null) {
 			return Maybe.just("the text was not selected");
 		} else if (this.portraits == null) {
@@ -140,7 +131,7 @@ class MainController {
 	 */
 	private startDrawingPortraits() : void {
 		//TODO: assert this.portraits == null
-		//TODO: drawPortraitsを thisを保持しつつsubroutineにしたい
+		//NOTE: drawPortraitsを thisを保持しつつsubroutineにしたい
 
 		this.$scope.endrollStarted = false;
 
@@ -155,10 +146,10 @@ class MainController {
 
 
 	/**
-	 * TODO: 書く
-	 * @param {File} foo
-	 * @param {number} bar
-	 * @param {number} baz
+	 * 1枚の画像をフェードインとフェードアウトで強調しながら描画します。
+	 * @param {File}   portrait   このメソッドで描画を行う対象の画像ファイル
+	 * @param {number} fadeMillis フェードインに扱うミリ秒 = フェードアウトに扱うミリ秒
+	 * @param {number} viewMillis フェードインが終わった後にportraitを表示しておくミリ秒
 	 */
 	private drawAPortrait(portrait: File, fadeMillis: number, viewMillis: number) : void {
 		let fileReader = new FileReader();
@@ -174,7 +165,7 @@ class MainController {
 
 
 	/**
-	 * TODO: 書く
+	 * エンドロールクレジットを流す処理を開始します。
 	 */
 	private startRisingCreditLines() {
 		$("#credits").css({
