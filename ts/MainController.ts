@@ -45,7 +45,7 @@ class MainController {
 		this.$scope.creditsRiseSpeed   = 20000;
 		this.$scope.aPortraitDrawSpeed = 4000;
 		this.$scope.creditsTextColor   = "Black";
-		this.$scope.endrollStarted     = true;
+		this.$scope.endrollStarted     = false;
 	}
 
 
@@ -96,10 +96,8 @@ class MainController {
 		if (invalidState.hasValue()) {
 			alert(invalidState.getValue());
 			return;
-		} else if (this.$scope.endrollStarted) {
-			alert("endroll has already started");
-			return;
 		}
+		this.$scope.endrollStarted = true;
 		this.startDrawingPortraits();
 		this.startRisingCreditLines();
 		//TODO: when endroll finished, do notify by some method
@@ -115,11 +113,12 @@ class MainController {
 	 */
 	private findInvalidStatus() : Maybe.Data<string> {
 		//TODO: check image of body background
-		console.log($("body").css("background-image"));
-		if (this.$scope.creditLines == null) {
-			return Maybe.just("the text was not selected");
+		if ($("body").css("background-image") == "none") {
+			return Maybe.just("The background image was not selected");
+		}if (this.$scope.creditLines == null) {
+			return Maybe.just("The text was not selected");
 		} else if (this.portraits == null) {
-			return Maybe.just("the portraits were not selected");
+			return Maybe.just("The portraits were not selected");
 		}
 		return Maybe.nothing;
 	}
@@ -132,8 +131,6 @@ class MainController {
 	private startDrawingPortraits() : void {
 		//TODO: assert this.portraits == null
 		//NOTE: drawPortraitsを thisを保持しつつsubroutineにしたい
-
-		this.$scope.endrollStarted = false;
 
 		// portraitsのうちdrawnPortraitNum番目の画像をthis.$scope.aPortraitDrawSpeedミリ秒描画します。
 		let fadeMillis: number       = this.$scope.aPortraitDrawSpeed / 4.0;
