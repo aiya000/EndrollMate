@@ -11,6 +11,10 @@ body {
     float: left;
 }
 
+#input_form #numeric_textarea {
+    text-align: right;
+}
+
 #credits {
     width: 50%;
     font-size: 24px;

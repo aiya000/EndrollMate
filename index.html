@@ -27,13 +27,13 @@
         <input type="file" ngf-select="ctrl.setCreditText($files)"/><br><br>
 
         テキストの流れる速さを入力してください. (数字が大きいほど遅い)<br>
-        <input type="text" ng-model="creditsRiseSpeed"/><br><br>
+        <input type="text" id="numeric_textarea" ng-model="creditsRiseSpeed"/><br><br>
 
         画像を選択してください.<br>
         <input type="file" accept="image/*" multiple ngf-select="ctrl.setPortraits($files)"/><br><br>
 
-        画像1枚に対する描画間隔を入力してください. (ミリ秒)<br>
-        <input type="text" ng-model="aPortraitDrawSpeed"/><br><br>
+        画像1枚に対する描画間隔を入力してください. <br>
+        <input type="text" id="numeric_textarea" ng-model="aPortraitDrawSpeed"/>ミリ秒<br><br>
 
         <input type="button" value="開始" ng-click="ctrl.startEndRoll()"/>
       </form>

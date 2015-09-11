@@ -8,15 +8,6 @@
  * @classdesc DocumentRoot/index.html <body>配下のコントロール
  */
 class MainController {
-	/* --- --- --- private const field --- --- --- */
-	private DRAW_MILLI_SEC: number = 4000;
-
-	/**
-	 * TODO: 書く
-	 */
-	private RISE_SPEED: number = 100000;
-
-
 	/* --- --- --- private field --- --- --- */
 	/**
 	 * TODO: 書く
@@ -56,10 +47,12 @@ class MainController {
 	 * @constructor
 	 */
 	constructor($scope: MainScope, $interval: ng.IIntervalService, $window: ng.IWindowService) {
-		this.$scope             = $scope;
-		this.$interval          = $interval;
-		this.$window            = $window;
-		this.$scope.endrollStarted = true;
+		this.$scope                    = $scope;
+		this.$interval                 = $interval;
+		this.$window                   = $window;
+		this.$scope.creditsRiseSpeed   = 4000;    // デフォルト値
+		this.$scope.aPortraitDrawSpeed = 100000;  // デフォルト値
+		this.$scope.endrollStarted     = true;
 	}
 
 
@@ -148,13 +141,13 @@ class MainController {
 
 		this.$scope.endrollStarted = false;
 
-		// portraitsのうちdrawnPortraitNum番目の画像をDRAW_MILLI_SECミリ秒描画します。
-		let fadeMillis: number       = this.DRAW_MILLI_SEC / 4.0;
-		let viewMillis: number       = this.DRAW_MILLI_SEC - fadeMillis * 2.0;
+		// portraitsのうちdrawnPortraitNum番目の画像をthis.$scope.aPortraitDrawSpeedミリ秒描画します。
+		let fadeMillis: number       = this.$scope.aPortraitDrawSpeed / 4.0;
+		let viewMillis: number       = this.$scope.aPortraitDrawSpeed - fadeMillis * 2.0;
 		let drawnPortraitNum: number = 0;  // 描画済みの画像の数
 		let drawPortraits: Function  = () => this.drawAPortrait(this.portraits[drawnPortraitNum++], fadeMillis, viewMillis);
 		this.$scope.portraitAlt      = "endroll-portrait";
-		this.$interval(drawPortraits, this.DRAW_MILLI_SEC, this.portraits.length);
+		this.$interval(drawPortraits, this.$scope.aPortraitDrawSpeed, this.portraits.length);
 	}
 
 
@@ -184,7 +177,7 @@ class MainController {
 		$("#credits").css("margin-top", -this.$window.innerHeight * 2.0);
 		$("#credits").tvCredits({
 			  height   : this.$window.innerHeight * 4.0
-			, speed    : this.RISE_SPEED
+			, speed    : this.$scope.creditsRiseSpeed
 			, complete : () => $("#credits").text("")
 		});
 	}
