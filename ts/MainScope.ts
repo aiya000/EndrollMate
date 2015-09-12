@@ -19,9 +19,14 @@ interface MainScope extends ng.IScope {
 	creditLines: string[];
 
 	/**
+	 * TODO: 書く
+	 */
+	creditsFontSize: number;
+
+	/**
 	 * エンドロールクレジットのフォントカラーを指定します。
 	 */
-	creditsTextColor: string;
+	creditsFontColor: string;
 
 	/**
 	 * エンドロールピクチャ1つの描画にかけるミリ秒。
