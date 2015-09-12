@@ -23,23 +23,28 @@
         バックグラウンドイメージを選択してください.<br>
         <input type="file" accept="image/*" ngf-select="ctrl.setBackgroundImage($files)"/><br><br>
 
+
         エンドロールに使用するテキストを選択してください.<br>
         <input type="file" ngf-select="ctrl.setCreditText($files)"/><br><br>
 
-        テキストの流れる速さを入力してください. (数字が大きいほど遅い)<br>
-        <input type="text" id="numeric_textarea" ng-model="creditsRiseSpeed"/><br><br>
-
-        テキストのフォント色を選択してください.<br>
-        <select id="creditsFontColor" ng-model="creditsTextColor">
-          <option style="background-color: white; color: black" selected="selected">Black</option>
-          <option style="background-color: black; color: white">White</option>
+        <!-- -- -- -- TODO: グループボックスの設置 -- -- -- -->
+        エンドロールテキスト設定<br>
+        流れる速さ (数字が大きいほど遅い):
+        <input type="text" class="numeric_textarea" ng-model="creditsRiseSpeed"/><br>
+        フォント色:
+        <select id="credits_font_color" value="Black" ng-model="creditsTextColor">
+          <option id="option_black">Black</option>
+          <option id="option_white">White</option>
         </select><br><br>
 
-        画像を選択してください.<br>
+
+        エンドロールピクチャを選択してください.<br>
         <input type="file" accept="image/*" multiple ngf-select="ctrl.setPortraits($files)"/><br><br>
 
-        画像1枚に対する描画間隔を入力してください. <br>
-        <input type="text" id="numeric_textarea" ng-model="aPortraitDrawSpeed"/>ミリ秒<br><br>
+        <!-- -- -- -- TODO: グループボックスの設置 -- -- -- -->
+        エンドロールピクチャ設定<br>
+        ピクチャ1枚に対する描画間隔:
+        <input type="text" class="numeric_textarea" ng-model="aPortraitDrawSpeed"/>ミリ秒<br><br>
 
         <input type="button" value="開始" ng-click="ctrl.startEndRoll()"/>
       </form>
