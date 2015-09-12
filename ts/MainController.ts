@@ -42,11 +42,11 @@ class MainController {
 		this.$interval = $interval;
 		this.$window   = $window;
 		// 初期値の設定
-		this.$scope.creditsRiseSpeed   = 20000;
-		this.$scope.aPortraitDrawSpeed = 4000;
-		this.$scope.creditsFontSize    = 24.0;
-		this.$scope.creditsFontColor   = "Black";
-		this.$scope.endrollStarted     = false;
+		this.$scope.creditsRiseSpeed  = 20000;
+		this.$scope.creditsFontSize   = 24.0;
+		this.$scope.creditsFontColor  = "Black";
+		this.$scope.endrollStarted    = false;
+		this.$scope.endrollFinishTime = 20;
 	}
 
 
@@ -56,9 +56,11 @@ class MainController {
 	 * @param {FileList} $files 選択した1つの画像ファイル
 	 */
 	public setBackgroundImage($files: FileList) : void {
-		let file: File = $files[0];
+		let file: File = $files[0];  //NOTE: TypeError ｲﾐﾜｶﾝﾅｲ!!
 		let fileReader = new FileReader();
-		let setBgImage: EventListener = e => $("body").css("background-image", "url(" + fileReader.result + ")");
+		let setBgImage: EventListener = e => {
+			$("body").css("background-image", "url(" + fileReader.result + ")");
+		};
 		fileReader.addEventListener("load", setBgImage);
 		fileReader.readAsDataURL(file);
 	}
@@ -69,7 +71,7 @@ class MainController {
 	 * @param {FileList} $files エンドロールに使用する1つのテキストファイル
 	 */
 	public setCreditText($files: FileList) : void {
-		let file: File = $files[0];
+		let file: File = $files[0];  //NOTE: TypeError ｲﾐﾜｶﾝﾅｲ!!
 		let fileReader = new FileReader();
 		let setRollLines: EventListener = e => {
 			this.$scope.creditLines = fileReader.result.split("\n");
@@ -130,16 +132,22 @@ class MainController {
 	 * 画像の描画には強調効果としてフェードイン, フェードアウトが使用されます。
 	 */
 	private startDrawingPortraits() : void {
-		//TODO: assert this.portraits == null
-		//NOTE: drawPortraitsを thisを保持しつつsubroutineにしたい
+		//TODO: assert this.portraits != null
+		//NOTE: drawPortraitsを thisを保持しつつsub methodにしたい
 
-		// portraitsのうちdrawnPortraitNum番目の画像をthis.$scope.aPortraitDrawSpeedミリ秒描画します。
-		let fadeMillis: number       = this.$scope.aPortraitDrawSpeed / 4.0;
-		let viewMillis: number       = this.$scope.aPortraitDrawSpeed - fadeMillis * 2.0;
-		let drawnPortraitNum: number = 0;  // 描画済みの画像の数
-		let drawPortraits: Function  = () => this.drawAPortrait(this.portraits[drawnPortraitNum++], fadeMillis, viewMillis);
-		this.$scope.portraitAlt      = "endroll-portrait";
-		this.$interval(drawPortraits, this.$scope.aPortraitDrawSpeed, this.portraits.length);
+		// 1つの画像の描画にかける時間の計算
+		let endrollTotalMiils: number = this.$scope.endrollFinishTime * 1000.0;
+		let onePictureMillis: number  = endrollTotalMiils / this.portraits.length;
+
+		// |----------- One Picture -----------|
+		// |- fade(in) -|- view -|- fade(out) -|
+		let fadeMillis: number        = onePictureMillis / 4.0;
+		let viewMillis: number        = onePictureMillis - fadeMillis * 2.0;
+
+		let drawnPortraitNum: number  = 0;  // 描画済みの画像の数
+		let drawPortraits: Function   = () => this.drawAPortrait(this.portraits[drawnPortraitNum++], fadeMillis, viewMillis);
+		this.$scope.portraitAlt       = "endroll-portrait";
+		this.$interval(drawPortraits, onePictureMillis, this.portraits.length);
 	}
 
 

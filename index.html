@@ -44,10 +44,8 @@
         エンドロールピクチャを選択してください.<br>
         <input type="file" accept="image/*" multiple ngf-select="ctrl.setPortraits($files)"/><br><br>
 
-        <!-- -- -- -- TODO: グループボックスの設置 -- -- -- -->
-        エンドロールピクチャ設定<br>
-        ピクチャ1枚に対する描画間隔:
-        <input type="text" class="numeric_textarea" ng-model="aPortraitDrawSpeed"/>ミリ秒<br><br>
+        エンドロールにかける時間を設定してください.<br>
+        <input type="text" class="numeric_textarea" ng-model="endrollFinishTime"/>秒<br><br>
 
         <input type="button" value="開始" ng-click="ctrl.startEndRoll()"/>
       </form>
