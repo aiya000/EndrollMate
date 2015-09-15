@@ -3,6 +3,12 @@
 /// <reference path="./typings/ng-file-upload/ng-file-upload.d.ts"/>
 /// <reference path="./MainScope.ts"/>
 /// <reference path="./Maybe.ts"/>
+<<<<<<< HEAD
+import IPromise  = ng.IPromise;
+import IDeferred = ng.IDeferred;
+=======
+import IPromise = ng.IPromise;
+>>>>>>> 6198d90... (Temporary commit) Put rail of promises (..)
 
 /**
  * @classdesc DocumentRoot/index.html <body>配下のコントロール
@@ -25,6 +31,16 @@ class MainController {
 	private $window: ng.IWindowService;
 
 	/**
+	 * TODO: 書く
+	 */
+	private $timeout: ng.ITimeoutService;
+
+	/**
+	 * TODO: 書く
+	 */
+	private $q: ng.IQService;
+
+	/**
 	 * input_formのngf-selectにて
 	 * エンドロールピクチャが格納されます。
 	 */
@@ -36,11 +52,13 @@ class MainController {
 	 * 使用するAngularJSのオブジェクトを受け取ります
 	 * @constructor
 	 */
-	constructor($scope: MainScope, $interval: ng.IIntervalService, $window: ng.IWindowService) {
+	constructor($scope: MainScope, $interval: ng.IIntervalService, $window: ng.IWindowService, $timeout: ng.ITimeoutService, $q: ng.IQService) {
 		// モジュールの設定
 		this.$scope    = $scope;
 		this.$interval = $interval;
 		this.$window   = $window;
+		this.$timeout  = $timeout;
+		this.$q        = $q;
 		// 初期値の設定
 		this.$scope.creditsRiseSpeed   = 20000;
 		this.$scope.aPortraitDrawSpeed = 4000;
@@ -101,10 +119,12 @@ class MainController {
 			return;
 		}
 		this.$scope.endrollStarted = true;
-		this.startDrawingPortraits();
-		this.startRisingCreditLines();
-		//TODO: when endroll finished, do notify by some method
-		//this.$scope.endMessage = "Endroll Finished";
+		let endrollPicturePromise: IPromise<void> = this.startDrawingPortraits();
+		let endrollCreditsPromise: IPromise<void> = this.startRisingCreditLines();
+		this.$q.all([endrollPicturePromise, endrollCreditsPromise]).then(() => {
+			//TODO: when endroll finished, do notify by some method
+			this.$scope.endMessage = "Endroll Finished";
+		});
 	}
 
 
@@ -131,17 +151,20 @@ class MainController {
 	 * setPortraits(FileList)で選択した全ての画像を描画します。
 	 * 画像の描画には強調効果としてフェードイン, フェードアウトが使用されます。
 	 */
-	private startDrawingPortraits() : void {
+	private startDrawingPortraits() : IPromise<void> {
 		//TODO: assert this.portraits != null
 		//NOTE: drawPortraitsを thisを保持しつつsub methodにしたい
 
-		// portraitsのうちdrawnPortraitNum番目の画像をthis.$scope.aPortraitDrawSpeedミリ秒描画します。
+		// this.$scope.aPortraitDrawSpeedは
+		// 実際「エンドロールピクチャのうちの1つのピクチャ(=portrait)を描画するための時間」だ
+		// portraitsのうちdrawnPortraitNum番目の画像をthis.$scope.aPortraitDrawSpeedミリ秒描画します
 		let fadeMillis: number       = this.$scope.aPortraitDrawSpeed / 4.0;
 		let viewMillis: number       = this.$scope.aPortraitDrawSpeed - fadeMillis * 2.0;
 		let drawnPortraitNum: number = 0;  // 描画済みの画像の数
 		let drawPortraits: Function  = () => this.drawAPortrait(this.portraits[drawnPortraitNum++], fadeMillis, viewMillis);
 		this.$scope.portraitAlt      = "endroll-portrait";
 		this.$interval(drawPortraits, this.$scope.aPortraitDrawSpeed, this.portraits.length);
+		return this.$timeout(this.$scope.aPortraitDrawSpeed * (this.portraits.length + 2));  //NOTE: 2 <- ??
 	}
 
 
@@ -167,16 +190,20 @@ class MainController {
 	/**
 	 * エンドロールクレジットを流す処理を開始します。
 	 */
-	private startRisingCreditLines() {
+	private startRisingCreditLines() : IPromise<void> {
+		let defer: IDeferred<any> = this.$q.defer();
 		$("#credits").css({
-			  "margin-top" : -this.$window.innerHeight * 2.0
-			, "font-size"  :  this.$scope.creditsFontSize + "px"
+			  "font-size"  :  this.$scope.creditsFontSize + "px"
 			, "color"      :  this.$scope.creditsFontColor
 		});
 		$("#credits").tvCredits({
-			  height   : this.$window.innerHeight * 4.0
+			  height   : this.$window.innerHeight * 2.0
 			, speed    : this.$scope.creditsRiseSpeed
-			, complete : () => $("#credits").text("")
+			, complete : () => {
+				$("#credits").text("");
+				defer.resolve();  // notify finishing
+			}
 		});
+		return defer.promise;
 	}
 }
