@@ -19,21 +19,26 @@ interface MainScope extends ng.IScope {
 	creditLines: string[];
 
 	/**
+	 * TODO: 書く
+	 */
+	creditsFontSize: number;
+
+	/**
+	 * エンドロールピクチャ1つの描画にかけるミリ秒。
+	 * これはフェードインとフェードアウトにかける時間を含みます。
+	 */
+	aPortraitDrawSpeed: number;
+
+	/**
 	 * エンドロールクレジットのフォントカラーを指定します。
 	 */
-	creditsTextColor: string;
+	creditsFontColor: string;
 
 	/**
 	 * エンドロールが既に始まっているか否かを示します。
 	 * ( 「開始」ボタンを押すとエンドロールが始まります )
 	 */
 	endrollStarted: boolean;
-
-	/**
-	 * エンドロールを終える予定時間(秒)です。
-	 * ( またはエンドロールにかける総時間です。 )
-	 */
-	endrollFinishTime: number;
 
 	/**
 	 * エンドロールピクチャを

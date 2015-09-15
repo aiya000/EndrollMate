@@ -42,10 +42,10 @@ class MainController {
 		this.$interval = $interval;
 		this.$window   = $window;
 		// 初期値の設定
-		this.$scope.endrollFinishTime = 20;
 		this.$scope.creditsRiseSpeed   = 20000;
 		this.$scope.aPortraitDrawSpeed = 4000;
-		this.$scope.creditsTextColor   = "Black";
+		this.$scope.creditsFontSize    = 24.0;
+		this.$scope.creditsFontColor   = "Black";
 		this.$scope.endrollStarted     = false;
 	}
 
@@ -170,7 +170,8 @@ class MainController {
 	private startRisingCreditLines() {
 		$("#credits").css({
 			  "margin-top" : -this.$window.innerHeight * 2.0
-			, "color"      :  this.$scope.creditsTextColor
+			, "font-size"  :  this.$scope.creditsFontSize + "px"
+			, "color"      :  this.$scope.creditsFontColor
 		});
 		$("#credits").tvCredits({
 			  height   : this.$window.innerHeight * 4.0
