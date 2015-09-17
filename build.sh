@@ -4,4 +4,5 @@ tsc --out js/index.js \
 	ts/MainController.ts \
 	ts/MainScope.ts \
 	ts/Maybe.ts \
-	ts/InvalidOperationError.ts
+	ts/InvalidOperationError.ts \
+	ts/Util.ts

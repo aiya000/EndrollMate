@@ -3,12 +3,9 @@
 /// <reference path="./typings/ng-file-upload/ng-file-upload.d.ts"/>
 /// <reference path="./MainScope.ts"/>
 /// <reference path="./Maybe.ts"/>
-<<<<<<< HEAD
+/// <reference path="./Util.ts" />
 import IPromise  = ng.IPromise;
 import IDeferred = ng.IDeferred;
-=======
-import IPromise = ng.IPromise;
->>>>>>> 6198d90... (Temporary commit) Put rail of promises (..)
 
 /**
  * @classdesc DocumentRoot/index.html <body>配下のコントロール
@@ -60,11 +57,16 @@ class MainController {
 		this.$timeout  = $timeout;
 		this.$q        = $q;
 		// 初期値の設定
-		this.$scope.creditsRiseSpeed   = 20000;
-		this.$scope.aPortraitDrawSpeed = 4000;
-		this.$scope.creditsFontSize    = 24.0;
-		this.$scope.creditsFontColor   = "Black";
-		this.$scope.endrollStarted     = false;
+		this.$scope.creditsRiseSpeed    = 20000;
+		this.$scope.aPortraitDrawSpeed  = 4000;
+		this.$scope.creditsFontSize     = 24.0;
+		this.$scope.creditsFontColor    = "Black";
+		this.$scope.endrollStarted      = false;
+		this.$scope.endrollFinished     = false;
+		this.$scope.endMessage          = "Endroll Finished";
+		this.$scope.endMessageViewSec   = 5.0;
+		this.$scope.endMessageFontSize  = 72.0;
+		this.$scope.endMessageFontColor = "Black";
 	}
 
 
@@ -123,7 +125,15 @@ class MainController {
 		let endrollCreditsPromise: IPromise<void> = this.startRisingCreditLines();
 		this.$q.all([endrollPicturePromise, endrollCreditsPromise]).then(() => {
 			//TODO: when endroll finished, do notify by some method
-			this.$scope.endMessage = "Endroll Finished";
+			let [fadeMillis, viewMillis]: [number, number] = Util.splitFadeAndViewMillis(this.$scope.endMessageViewSec * 1000.0);
+			this.$scope.endrollFinished = true;
+			$("#end_message").css({
+				  "font-size" : this.$scope.endMessageFontSize + "px"
+				, "color"     : this.$scope.endMessageFontColor
+			});
+			$("#end_message").fadeIn(fadeMillis, () => {
+				$("#end_message").delay(viewMillis).fadeOut(fadeMillis);
+			});
 		});
 	}
 
@@ -135,10 +145,9 @@ class MainController {
 	 * @return {Maybe.Data<string>} 無効な状態があればMaybeで包まれたエラーメッセージ,もしくはnothing
 	 */
 	private findInvalidStatus() : Maybe.Data<string> {
-		//TODO: check image of body background
 		if ($("body").css("background-image") == "none") {
 			return Maybe.just("The background image was not selected");
-		}if (this.$scope.creditLines == null) {
+		} else if (this.$scope.creditLines == null) {
 			return Maybe.just("The text was not selected");
 		} else if (this.portraits == null) {
 			return Maybe.just("The portraits were not selected");
@@ -158,8 +167,7 @@ class MainController {
 		// this.$scope.aPortraitDrawSpeedは
 		// 実際「エンドロールピクチャのうちの1つのピクチャ(=portrait)を描画するための時間」だ
 		// portraitsのうちdrawnPortraitNum番目の画像をthis.$scope.aPortraitDrawSpeedミリ秒描画します
-		let fadeMillis: number       = this.$scope.aPortraitDrawSpeed / 4.0;
-		let viewMillis: number       = this.$scope.aPortraitDrawSpeed - fadeMillis * 2.0;
+		let [fadeMillis, viewMillis]: [number, number] = Util.splitFadeAndViewMillis(this.$scope.aPortraitDrawSpeed);
 		let drawnPortraitNum: number = 0;  // 描画済みの画像の数
 		let drawPortraits: Function  = () => this.drawAPortrait(this.portraits[drawnPortraitNum++], fadeMillis, viewMillis);
 		this.$scope.portraitAlt      = "endroll-portrait";

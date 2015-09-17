@@ -36,8 +36,8 @@
         <!-- -- -- -- TODO: コンボボックスじゃない感 -- -- -- -->
         フォント色:
         <select id="credits_font_color" value="Black" ng-model="creditsFontColor">
-          <option id="option_black">Black</option>
-          <option id="option_white">White</option>
+          <option class="option_black">Black</option>
+          <option class="option_white">White</option>
         </select><br><br>
 
 
@@ -48,6 +48,19 @@
         エンドロールピクチャ設定<br>
         ピクチャ1枚に対する描画間隔:
         <input type="text" class="numeric_textarea" ng-model="aPortraitDrawSpeed"/>ミリ秒<br><br>
+
+        ラストメッセージを、どうぞ:
+        <input type="text" ng-model="endMessage"/><br>
+        ラストメッセージの表示時間:
+        <input type="text" class="numeric_textarea" ng-model="endMessageViewSec"/>秒<br><br>
+        フォントサイズ:
+        <input type="text" class="numeric_textarea" ng-model="endMessageFontSize"/>px<br>
+        <!-- -- -- -- TODO: コンボボックスじゃない感 -- -- -- -->
+        フォント色:
+        <select id="end_message_font_color" value="Black" ng-model="endMessageFontColor">
+          <option class="option_black">Black</option>
+          <option class="option_white">White</option>
+        </select><br><br>
 
         <input type="button" value="開始" ng-click="ctrl.startEndRoll()"/>
       </form>
@@ -61,6 +74,6 @@
 
     <img id="portrait" src="{{ portraitSrc }}" alt="{{ portraitAlt }}"><br>
 
-    <p>{{ endMessage }}</p>
+    <p id="end_message" ng-show="endrollFinished">{{ endMessage }}</p>
   </body>
 </html>
