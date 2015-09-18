@@ -50,17 +50,6 @@ class MainController {
 		this.$interval = $interval;
 		this.$timeout  = $timeout;
 		this.$q        = $q;
-		// 初期値の設定
-		this.$scope.creditsRiseSpeed    = 40000;
-		this.$scope.aPortraitDrawSpeed  = 4000;
-		this.$scope.creditsFontSize     = 24.0;
-		this.$scope.creditsFontColor    = "White";
-		this.$scope.endrollStarted      = false;
-		this.$scope.endrollFinished     = false;
-		this.$scope.endMessage          = "Thanks for watching !";
-		this.$scope.endMessageViewSec   = 5.0;
-		this.$scope.endMessageFontSize  = 72.0;
-		this.$scope.endMessageFontColor = "White";
 	}
 
 

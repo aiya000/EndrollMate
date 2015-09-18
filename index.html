@@ -16,7 +16,7 @@
     <script src="./js/tvcredits/tvcredits.jquery.js"></script>
     <script src="./js/index.js"></script>
   </head>
-  <body ng-controller="MainController as ctrl">
+  <body ng-controller="MainController as ctrl" ng-init="endrollStarted = false">
 
     <div id="input_form" ng-hide="endrollStarted">
       <form novalidate>
@@ -30,12 +30,12 @@
         <!-- -- -- -- TODO: グループボックスの設置 -- -- -- -->
         エンドロールテキスト設定<br>
         流れる速さ (数字が大きいほど遅い):
-        <input type="text" class="numeric_textarea" ng-model="creditsRiseSpeed"/><br>
+        <input type="text" class="numeric_textarea" ng-init="creditsRiseSpeed = 40000" ng-model="creditsRiseSpeed"/><br>
         フォントサイズ:
-        <input type="text" class="numeric_textarea" ng-model="creditsFontSize"/>px<br>
+        <input type="text" class="numeric_textarea" ng-init="creditsFontSize = 24.0" ng-model="creditsFontSize"/>px<br>
         <!-- -- -- -- TODO: コンボボックスじゃない感 -- -- -- -->
         フォント色:
-        <select id="credits_font_color" value="Black" ng-model="creditsFontColor">
+        <select id="credits_font_color" value="Black" ng-init="creditsFontColor = 'White'" ng-model="creditsFontColor">
           <option class="option_black">Black</option>
           <option class="option_white">White</option>
         </select><br><br>
@@ -47,17 +47,17 @@
         <!-- -- -- -- TODO: グループボックスの設置 -- -- -- -->
         エンドロールピクチャ設定<br>
         ピクチャ1枚に対する描画間隔:
-        <input type="text" class="numeric_textarea" ng-model="aPortraitDrawSpeed"/>ミリ秒<br><br>
+        <input type="text" class="numeric_textarea" ng-init="aPortraitDrawSpeed = 4000" ng-model="aPortraitDrawSpeed"/>ミリ秒<br><br>
 
         ラストメッセージを、どうぞ:
-        <input type="text" ng-model="endMessage"/><br>
+        <input type="text" ng-init="endMessage = 'Thanks for watching !'" ng-model="endMessage"/><br>
         ラストメッセージの表示時間:
-        <input type="text" class="numeric_textarea" ng-model="endMessageViewSec"/>秒<br><br>
+        <input type="text" class="numeric_textarea" ng-init="endMessageViewSec = 5.0" ng-model="endMessageViewSec"/>秒<br><br>
         フォントサイズ:
-        <input type="text" class="numeric_textarea" ng-model="endMessageFontSize"/>px<br>
+        <input type="text" class="numeric_textarea" ng-init="endMessageFontSize = 72.0" ng-model="endMessageFontSize"/>px<br>
         <!-- -- -- -- TODO: コンボボックスじゃない感 -- -- -- -->
         フォント色:
-        <select id="end_message_font_color" value="Black" ng-model="endMessageFontColor">
+        <select id="end_message_font_color" value="Black" ng-init="endMessageFontColor = 'White'" ng-model="endMessageFontColor">
           <option class="option_black">Black</option>
           <option class="option_white">White</option>
         </select><br><br>
@@ -74,6 +74,6 @@
 
     <img id="portrait" src="{{ portraitSrc }}" alt="{{ portraitAlt }}"><br>
 
-    <p id="end_message" ng-show="endrollFinished">{{ endMessage }}</p>
+    <p id="end_message" ng-init="endrollFinished = false" ng-show="endrollFinished">{{ endMessage }}</p>
   </body>
 </html>
