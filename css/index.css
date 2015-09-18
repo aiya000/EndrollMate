@@ -1,7 +1,7 @@
 body {
     background-color: white;
     background-repeat: no-repeat;
-    background-position: Center center;
+    background-position: center center;
     background-attachment: fixed;
     background-size: cover;
     overflow: hidden;
@@ -32,12 +32,21 @@ body {
     float: left;
 }
 
-#credits ul {
+#credit_lines {
     list-style: none;
+}
+
+#credit_line {
+    margin-bottom: 10px;
 }
 
 #portrait {
     width: 70%;
     height: 50%;
     float: right;
+}
+
+/* NOTE: could not function */
+#end_message {
+    margin: 0 auto;
 }

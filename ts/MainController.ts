@@ -23,11 +23,6 @@ class MainController {
 	private $interval: ng.IIntervalService;
 
 	/**
-	 * エンドロールクレジットのパラメータ設定に使用されます。
-	 */
-	private $window: ng.IWindowService;
-
-	/**
 	 * TODO: 書く
 	 */
 	private $timeout: ng.ITimeoutService;
@@ -49,24 +44,23 @@ class MainController {
 	 * 使用するAngularJSのオブジェクトを受け取ります
 	 * @constructor
 	 */
-	constructor($scope: MainScope, $interval: ng.IIntervalService, $window: ng.IWindowService, $timeout: ng.ITimeoutService, $q: ng.IQService) {
+	constructor($scope: MainScope, $interval: ng.IIntervalService, $timeout: ng.ITimeoutService, $q: ng.IQService) {
 		// モジュールの設定
 		this.$scope    = $scope;
 		this.$interval = $interval;
-		this.$window   = $window;
 		this.$timeout  = $timeout;
 		this.$q        = $q;
 		// 初期値の設定
-		this.$scope.creditsRiseSpeed    = 20000;
+		this.$scope.creditsRiseSpeed    = 40000;
 		this.$scope.aPortraitDrawSpeed  = 4000;
 		this.$scope.creditsFontSize     = 24.0;
-		this.$scope.creditsFontColor    = "Black";
+		this.$scope.creditsFontColor    = "White";
 		this.$scope.endrollStarted      = false;
 		this.$scope.endrollFinished     = false;
-		this.$scope.endMessage          = "Endroll Finished";
+		this.$scope.endMessage          = "Thanks for watching !";
 		this.$scope.endMessageViewSec   = 5.0;
 		this.$scope.endMessageFontSize  = 72.0;
-		this.$scope.endMessageFontColor = "Black";
+		this.$scope.endMessageFontColor = "White";
 	}
 
 
@@ -124,7 +118,6 @@ class MainController {
 		let endrollPicturePromise: IPromise<void> = this.startDrawingPortraits();
 		let endrollCreditsPromise: IPromise<void> = this.startRisingCreditLines();
 		this.$q.all([endrollPicturePromise, endrollCreditsPromise]).then(() => {
-			//TODO: when endroll finished, do notify by some method
 			let [fadeMillis, viewMillis]: [number, number] = Util.splitFadeAndViewMillis(this.$scope.endMessageViewSec * 1000.0);
 			this.$scope.endrollFinished = true;
 			$("#end_message").css({
@@ -200,18 +193,32 @@ class MainController {
 	 */
 	private startRisingCreditLines() : IPromise<void> {
 		let defer: IDeferred<any> = this.$q.defer();
-		$("#credits").css({
-			  "font-size"  :  this.$scope.creditsFontSize + "px"
-			, "color"      :  this.$scope.creditsFontColor
+		let creditsHeight: number = this.calcCreditsHeight();
+		$("#credits").css(<Object>{
+			  "margin-top" : -creditsHeight
+			, "margin-bottom" : creditsHeight
+			, "font-size"  : this.$scope.creditsFontSize + "px"
+			, "color"      : this.$scope.creditsFontColor
 		});
-		$("#credits").tvCredits({
-			  height   : this.$window.innerHeight * 2.0
+		$("#credits").tvCredits(<ITvCreditsOptions>{
+			  height   : creditsHeight * 2.0  // credit_linesの高さ + 画面の下に潜らせるためのcredit_linesの高さ
 			, speed    : this.$scope.creditsRiseSpeed
 			, complete : () => {
-				$("#credits").text("");
-				defer.resolve();  // notify finishing
+				$("#credits").text("");  // suppress automatic infinity loop
+				defer.resolve();         // notify complete
 			}
 		});
 		return defer.promise;
+	}
+
+
+	/**
+	 * TODO: 書く
+	 */
+	private calcCreditsHeight() : number {
+		let lineNum: number       = $("#credit_lines li").length + 2;  //NOTE: 2 <- ??
+		let oneLineMargin: number = parseInt($("#credit_lines li").css("margin-bottom"));  // pixel to number
+		let oneLineHeight: number = this.$scope.creditsFontSize + oneLineMargin;
+		return oneLineHeight * lineNum;
 	}
 }
