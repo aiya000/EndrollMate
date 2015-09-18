@@ -7,7 +7,7 @@ import InvalidOperationError = Exceptions.InvalidOperationError;
  * Maybeを表す型と値を格納します。
  * @namespace
  */
-module Maybe {
+namespace Maybe {
 	/**
 	 * 「データを持っているかもしれないし持っていないかもしれない」ことを表します。
 	 *

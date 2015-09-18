@@ -1,3 +1,3 @@
-- jQuery should notify operation finish to AngularJS
 - Combobox change foreground color on combobox selection changed
 - All jQuery was alternated by AngularJS
+- Fix endroll text's crazy draw speed that it happend when input endroll text's speed

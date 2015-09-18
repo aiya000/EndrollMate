@@ -9,7 +9,8 @@
 interface MainScope extends ng.IScope {
 
 	/**
-	 * エンドロールクレジットの流れのスピードです。
+	 * フォームによって入力される
+	 * エンドロールクレジットの描画スピードを格納します。
 	 */
 	creditsRiseSpeed: number;
 
@@ -19,7 +20,8 @@ interface MainScope extends ng.IScope {
 	creditLines: string[];
 
 	/**
-	 * TODO: 書く
+	 * フォームによって入力される
+	 * エンドロールテキストのフォントサイズを格納します。
 	 */
 	creditsFontSize: number;
 
@@ -30,6 +32,7 @@ interface MainScope extends ng.IScope {
 	aPortraitDrawSpeed: number;
 
 	/**
+	 * フォームによって入力される
 	 * エンドロールクレジットのフォントカラーを指定します。
 	 */
 	creditsFontColor: string;
@@ -57,7 +60,8 @@ interface MainScope extends ng.IScope {
 	endrollFinished: boolean;
 
 	/**
-	 * エンドロールが終了した後に強調表示する文字列を指定します。
+	 * フォームによって入力される
+	 * エンドロールが終了した後に強調表示される文字列を格納します。
 	 */
 	endMessage: string;
 
@@ -70,12 +74,14 @@ interface MainScope extends ng.IScope {
 	endMessageViewSec: number;
 
 	/**
-	 * TODO: 書く
+	 * フォームによって入力される、
+	 * エンドロール終了後に表示されるテキストのフォントサイズを格納します。
 	 */
 	endMessageFontSize: number;
 
 	/**
-	 * TODO: 書く
+	 * フォームによって入力される、
+	 * エンドロール終了後に表示されるテキストのフォントカラーを格納します。
 	 */
 	endMessageFontColor: string;
 }

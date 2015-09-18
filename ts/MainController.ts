@@ -23,12 +23,12 @@ class MainController {
 	private $interval: ng.IIntervalService;
 
 	/**
-	 * TODO: 書く
+	 * エンドロールピクチャの描画終了通知に使用されます。
 	 */
 	private $timeout: ng.ITimeoutService;
 
 	/**
-	 * TODO: 書く
+	 * エンドロールテキストの描画終了通知に使用されます。
 	 */
 	private $q: ng.IQService;
 
@@ -141,10 +141,10 @@ class MainController {
 	/**
 	 * setPortraits(FileList)で選択した全ての画像を描画します。
 	 * 画像の描画には強調効果としてフェードイン, フェードアウトが使用されます。
+	 * @return エンドロールピクチャの描画終了通知
 	 */
 	private startDrawingPortraits() : IPromise<void> {
 		//TODO: assert this.portraits != null
-		//NOTE: drawPortraitsを thisを保持しつつsub methodにしたい
 
 		// this.$scope.aPortraitDrawSpeedは
 		// 実際「エンドロールピクチャのうちの1つのピクチャ(=portrait)を描画するための時間」だ
@@ -179,6 +179,7 @@ class MainController {
 
 	/**
 	 * エンドロールクレジットを流す処理を開始します。
+	 * @return エンドロールテキストの描画終了通知
 	 */
 	private startRisingCreditLines() : IPromise<void> {
 		let defer: IDeferred<any> = this.$q.defer();
@@ -202,7 +203,9 @@ class MainController {
 
 
 	/**
-	 * TODO: 書く
+	 * 受け取ったエンドロールテキスト用テキストファイルを元に
+	 * エンドロールテキスト全体の高さ(px)を返します。
+	 * @return エンドロールテキスト全体の高さ(px)
 	 */
 	private calcCreditsHeight() : number {
 		let lineNum: number       = $("#credit_lines li").length + 2;  //NOTE: 2 <- ??
