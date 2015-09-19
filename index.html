@@ -68,12 +68,12 @@
 
     <div id="credits" ng-show="endrollStarted">
       <ul id="credit_lines">
-        <li id="credit_line" ng-repeat="creditLine in creditLines track by $index">{{ creditLine }}</li>
+        <li id="credit_line" ng-bind="creditLine" ng-repeat="creditLine in creditLines track by $index"></li>
       </ul>
     </div>
 
     <img id="portrait" src="{{ portraitSrc }}" alt="{{ portraitAlt }}"><br>
 
-    <p id="end_message" ng-init="endrollFinished = false" ng-show="endrollFinished">{{ endMessage }}</p>
+    <p id="end_message" ng-bind="endMessage" ng-show="endrollFinished"></p>
   </body>
 </html>
