@@ -113,7 +113,7 @@ class MainController {
 				  "font-size" : this.$scope.endMessageFontSize + "px"
 				, "color"     : this.$scope.endMessageFontColor
 			});
-			$("#end_message").deley(2.0).fadeIn(fadeMillis, () => {
+			$("#end_message").delay(2.0).fadeIn(fadeMillis, () => {
 				$("#end_message").delay(viewMillis).fadeOut(fadeMillis);
 			});
 		});
