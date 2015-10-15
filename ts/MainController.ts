@@ -7,6 +7,7 @@
 import IPromise  = ng.IPromise;
 import IDeferred = ng.IDeferred;
 
+
 /**
  * @classdesc DocumentRoot/index.html <body>配下のコントロール
  */
@@ -67,7 +68,6 @@ class MainController {
 		this.bgImage = $files[0];  //NOTE: TypeError ｲﾐﾜｶﾝﾅｲ!!
 	}
 
-
 	/**
 	 * エンドロールに使用するテキストファイルを設定します
 	 * @param {FileList} $files エンドロールに使用する1つのテキストファイル
@@ -82,7 +82,6 @@ class MainController {
 		fileReader.readAsText(file);
 	}
 
-
 	/**
 	 * エンドロール中に描画される画像のリストを設定します
 	 * @param {FileList} $files エンドロール中に描画される画像のリスト
@@ -90,7 +89,6 @@ class MainController {
 	public setPortraits($files: FileList) : void {
 		this.portraits = $files;
 	}
-
 
 	/**
 	 * フォームで設定した項目を元にエンドロールを開始します。
@@ -149,7 +147,6 @@ class MainController {
 		return Maybe.nothing;
 	}
 
-
 	/**
 	 * setPortraits(FileList)で選択した全ての画像を描画します。
 	 * 画像の描画には強調効果としてフェードイン, フェードアウトが使用されます。
@@ -157,7 +154,6 @@ class MainController {
 	 */
 	private startDrawingPortraits() : IPromise<void> {
 		//TODO: assert this.portraits != null
-
 		// this.$scope.aPortraitDrawSpeedは
 		// 実際「エンドロールピクチャのうちの1つのピクチャ(=portrait)を描画するための時間」だ
 		// portraitsのうちdrawnPortraitNum番目の画像をthis.$scope.aPortraitDrawSpeedミリ秒描画します
@@ -168,7 +164,6 @@ class MainController {
 		this.$interval(drawPortraits, this.$scope.aPortraitDrawSpeed, this.portraits.length);
 		return this.$timeout(this.$scope.aPortraitDrawSpeed * (this.portraits.length + 2));  //NOTE: 2 <- ??
 	}
-
 
 	/**
 	 * 1枚の画像をフェードインとフェードアウトで強調しながら描画します。
@@ -188,7 +183,6 @@ class MainController {
 		fileReader.readAsDataURL(portrait);
 	}
 
-
 	/**
 	 * エンドロールクレジットを流す処理を開始します。
 	 * @return エンドロールテキストの描画終了通知
@@ -202,7 +196,7 @@ class MainController {
 			"font-size"     : this.$scope.creditsFontSize + "px",
 			"color"         : this.$scope.creditsFontColor
 		});
-		$("#credits").tvCredits(<ITvCreditsOptions>{
+		$("#credits").tvCredits({
 			height   : creditsHeight * 2.0,    // credit_linesの高さ + 画面の下に潜らせるためのcredit_linesの高さ
 			speed    : this.$scope.creditsRiseSpeed,
 			complete : () => {
@@ -212,7 +206,6 @@ class MainController {
 		});
 		return defer.promise;
 	}
-
 
 	/**
 	 * 受け取ったエンドロールテキスト用テキストファイルを元に
