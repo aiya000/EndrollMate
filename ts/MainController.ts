@@ -33,6 +33,11 @@ class MainController {
 	private $q: ng.IQService;
 
 	/**
+	 * TODO: 書く
+	 */
+	private bgImage: File;
+
+	/**
 	 * input_formのngf-selectにて
 	 * エンドロールピクチャが格納されます。
 	 */
@@ -55,17 +60,11 @@ class MainController {
 
 	/* --- --- --- public method --- --- --- */
 	/**
-	 * フォームで指定された画像をbodyの背景に設定します
-	 * @param {FileList} $files 選択した1つの画像ファイル
+	 * フォームで指定された画像をインスタンスに格納します
+	 * @param {FileList} $files 唯一の要素のあるファイルリスト(選択した1つの画像ファイルのあるリスト)
 	 */
 	public setBackgroundImage($files: FileList) : void {
-		let file: File = $files[0];  //NOTE: TypeError ｲﾐﾜｶﾝﾅｲ!!
-		let fileReader = new FileReader();
-		let setBgImage: EventListener = e => {
-			$("body").css("background-image", "url(" + fileReader.result + ")");
-		};
-		fileReader.addEventListener("load", setBgImage);
-		fileReader.readAsDataURL(file);
+		this.bgImage = $files[0];  //NOTE: TypeError ｲﾐﾜｶﾝﾅｲ!!
 	}
 
 
@@ -104,14 +103,15 @@ class MainController {
 			return;
 		}
 		this.$scope.endrollStarted = true;
+		this.implantBackgroundImage();
 		let endrollPicturePromise: IPromise<void> = this.startDrawingPortraits();
 		let endrollCreditsPromise: IPromise<void> = this.startRisingCreditLines();
 		this.$q.all([endrollPicturePromise, endrollCreditsPromise]).then(() => {
 			let [fadeMillis, viewMillis]: [number, number] = Util.splitFadeAndViewMillis(this.$scope.endMessageViewSec * 1000.0);
 			this.$scope.endrollFinished = true;
 			$("#end_message").css({
-				  "font-size" : this.$scope.endMessageFontSize + "px"
-				, "color"     : this.$scope.endMessageFontColor
+				"font-size" : this.$scope.endMessageFontSize + "px",
+				"color"     : this.$scope.endMessageFontColor
 			});
 			$("#end_message").delay(2.0).fadeIn(fadeMillis, () => {
 				$("#end_message").delay(viewMillis).fadeOut(fadeMillis);
@@ -122,12 +122,24 @@ class MainController {
 
 	/* --- --- --- private method --- --- --- */
 	/**
+	 * bodyの背景にsetBackgroundImage()で指定された画像を設定します
+	 */
+	private implantBackgroundImage() : void {
+		let fileReader = new FileReader();
+		let setBgImage: EventListener = e => {
+			$("body").css("background-image", "url(" + fileReader.result + ")");
+		};
+		fileReader.addEventListener("load", setBgImage);
+		fileReader.readAsDataURL(this.bgImage);
+	}
+
+	/**
 	 * エンドロールの開始条件が整っているかを検査します。
 	 * 各inputフォームが検査されます。
 	 * @return {Maybe.Data<string>} 無効な状態があればMaybeで包まれたエラーメッセージ,もしくはnothing
 	 */
 	private findInvalidStatus() : Maybe.Data<string> {
-		if ($("body").css("background-image") == "none") {
+		if (this.bgImage == null) {
 			return Maybe.just("The background image was not selected");
 		} else if (this.$scope.creditLines == null) {
 			return Maybe.just("The text was not selected");
@@ -185,15 +197,15 @@ class MainController {
 		let defer: IDeferred<any> = this.$q.defer();
 		let creditsHeight: number = this.calcCreditsHeight();
 		$("#credits").css(<Object>{
-			  "margin-top" : -creditsHeight
-			, "margin-bottom" : creditsHeight
-			, "font-size"  : this.$scope.creditsFontSize + "px"
-			, "color"      : this.$scope.creditsFontColor
+			"margin-top"    : -creditsHeight,
+			"margin-bottom" : creditsHeight,
+			"font-size"     : this.$scope.creditsFontSize + "px",
+			"color"         : this.$scope.creditsFontColor
 		});
 		$("#credits").tvCredits(<ITvCreditsOptions>{
-			  height   : creditsHeight * 2.0  // credit_linesの高さ + 画面の下に潜らせるためのcredit_linesの高さ
-			, speed    : this.$scope.creditsRiseSpeed
-			, complete : () => {
+			height   : creditsHeight * 2.0,    // credit_linesの高さ + 画面の下に潜らせるためのcredit_linesの高さ
+			speed    : this.$scope.creditsRiseSpeed,
+			complete : () => {
 				$("#credits").text("");  // suppress automatic infinity loop
 				defer.resolve();         // notify complete
 			}
