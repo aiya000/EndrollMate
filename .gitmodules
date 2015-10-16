@@ -1,3 +1,3 @@
-[submodule "js/tvcredits"]
-	path = js/tvcredits
-	url = https://github.com/rosantoz/tvcredits.git
+[submodule "ts/jquery.keyframes.d.ts"]
+	path = ts/jquery.keyframes.d.ts
+	url = https://github.com/aiya000/jquery.keyframes.d.ts

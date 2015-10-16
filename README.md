@@ -3,10 +3,10 @@
 ## Requires
 
 * node packages
-  - grunt
-  - grunt-typescript
-  - grunt-babel
-
+  - grunt-cli
+  - typescript@next (recommended)
+  - babel
 
 ## TODO
-- ...Learn more AngularJS
+- Fix warns and errors of prefixfree
+- Define namespaces and organize some objects

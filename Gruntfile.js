@@ -10,7 +10,8 @@ module.exports = function (grunt) {
 					"ts/MainScope.ts",
 					"ts/Maybe.ts",
 					"ts/InvalidOperationError.ts",
-					"ts/Util.ts"
+					"ts/Util.ts",
+					"ts/ascroller.ts"
 				],
 				dest : "ts/es6/index.js",
 				options : {

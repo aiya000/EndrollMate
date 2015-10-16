@@ -1,76 +1,76 @@
 <!DOCTYPE html>
 <html lang="ja" ng-app="appEndrollMate">
-  <head>
-    <meta charset="UTF-8">
-    <title>EndrollMate</title>
-    <link rel="stylesheet" href="./css/index.css">
-    <!--
-    <script src="./js/bower_components/angular/angular.min.js"></script>
-    <script src="./js/bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="./js/bower_components/ng-file-upload/ng-file-upload.min.js"></script>
-    <script src="./js/tvcredits/tvcredits.jquery.min.js"></script>
-    -->
-    <script src="./js/bower_components/angular/angular.js"></script>
-    <script src="./js/bower_components/jquery/dist/jquery.js"></script>
-    <script src="./js/bower_components/ng-file-upload/ng-file-upload.js"></script>
-    <script src="./js/tvcredits/tvcredits.jquery.js"></script>
-    <script src="./js/index.js"></script>
-  </head>
-  <body ng-controller="MainController as ctrl" ng-init="endrollStarted=false">
-    <div id="input_form" ng-hide="endrollStarted">
-      <form novalidate>
-        バックグラウンドイメージを選択してください.<br>
-        <input type="file" accept="image/*" ngf-select="ctrl.setBackgroundImage($files)"/><br><br>
 
-        エンドロールに使用するテキストを選択してください.<br>
-        <input type="file" ngf-select="ctrl.setCreditText($files)"/><br><br>
+    <head>
+        <meta charset="UTF-8">
+        <title>EndrollMate</title>
+        <link rel="stylesheet" href="./css/index.css">
+        <!--
+        <script src="./js/bower_components/angular/angular.min.js"></script>
+        <script src="./js/bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="./js/bower_components/ng-file-upload/ng-file-upload.min.js"></script>
+        <script src="./js/tvcredits/tvcredits.jquery.min.js"></script>
+        -->
+        <script src="./js/bower_components/angular/angular.js"></script>
+        <script src="./js/bower_components/jquery/dist/jquery.js"></script>
+        <script src="./js/bower_components/ng-file-upload/ng-file-upload.js"></script>
+        <script src="./js/bower_components/prefixfree/prefixfree.min.js"></script>
+        <script src="./js/bower_components/jQueryKeyframes/jquery.keyframes.js"></script>
+        <script src="./js/index.js"></script>
+    </head>
+    <body ng-controller="MainController as ctrl" ng-init="endrollStarted=false">
+        <div id="input_form" ng-hide="endrollStarted">
+            <form novalidate>
+                バックグラウンドイメージを選択してください.<br>
+                <input type="file" accept="image/*" ngf-select="ctrl.setBackgroundImage($files)"/><br><br>
 
-        <!-- -- -- -- TODO: グループボックスの設置 -- -- -- -->
-        エンドロールテキスト設定<br>
-        流れる速さ (数字が大きいほど遅い):
-        <input type="text" class="numeric_textarea" ng-init="creditsRiseSpeed=40000" ng-model="creditsRiseSpeed" ng-pattern="/^[0-9]$/" require/><br>
-        フォントサイズ:
-        <input type="text" class="numeric_textarea" ng-init="creditsFontSize=24.0" ng-model="creditsFontSize"/>px<br>
-        <!-- -- -- -- TODO: コンボボックスじゃない感 -- -- -- -->
-        フォント色:
-        <select id="credits_font_color" value="Black" ng-init="creditsFontColor='White'" ng-model="creditsFontColor">
-          <option class="option_black">Black</option>
-          <option class="option_white">White</option>
-        </select><br><br>
+                エンドロールに使用するテキストを選択してください.<br>
+                <input type="file" ngf-select="ctrl.setCreditText($files)"/><br><br>
 
-        エンドロールピクチャを選択してください.<br>
-        <input type="file" accept="image/*" multiple ngf-select="ctrl.setPortraits($files)"/><br><br>
+                <!-- -- -- -- TODO: グループボックスの設置 -- -- -- -->
+                エンドロールテキスト設定<br>
+                流れる速さ (数字が大きいほど遅い):
+                <input type="text" class="numeric_textarea" ng-init="creditsRiseSpeed=300" ng-model="creditsRiseSpeed" require/><br>
+                フォントサイズ:
+                <input type="text" class="numeric_textarea" ng-init="creditsFontSize=24.0" ng-model="creditsFontSize"/>px<br>
+                <!-- -- -- -- TODO: コンボボックスじゃない感 -- -- -- -->
+                フォント色:
+                <select id="credits_font_color" value="Black" ng-init="creditsFontColor='White'" ng-model="creditsFontColor">
+                    <option class="option_black">Black</option>
+                    <option class="option_white">White</option>
+                </select><br><br>
 
-        <!-- -- -- -- TODO: グループボックスの設置 -- -- -- -->
-        エンドロールピクチャ設定<br>
-        ピクチャ1枚に対する描画間隔:
-        <input type="text" class="numeric_textarea" ng-init="aPortraitDrawSpeed=4000" ng-model="aPortraitDrawSpeed"/>ミリ秒<br><br>
+                エンドロールピクチャを選択してください.<br>
+                <input type="file" accept="image/*" multiple ngf-select="ctrl.setPortraits($files)"/><br><br>
 
-        ラストメッセージを、どうぞ:
-        <input type="text" ng-init="endMessage='Thanks for watching !'" ng-model="endMessage"/><br>
-        ラストメッセージの表示時間:
-        <input type="text" class="numeric_textarea" ng-init="endMessageViewSec=5.0" ng-model="endMessageViewSec"/>秒<br><br>
-        フォントサイズ:
-        <input type="text" class="numeric_textarea" ng-init="endMessageFontSize=72.0" ng-model="endMessageFontSize"/>px<br>
-        <!-- -- -- -- TODO: コンボボックスじゃない感 -- -- -- -->
-        フォント色:
-        <select id="end_message_font_color" value="Black" ng-init="endMessageFontColor='White'" ng-model="endMessageFontColor">
-          <option class="option_black">Black</option>
-          <option class="option_white">White</option>
-        </select><br><br>
+                <!-- -- -- -- TODO: グループボックスの設置 -- -- -- -->
+                エンドロールピクチャ設定<br>
+                ピクチャ1枚に対する描画間隔:
+                <input type="text" class="numeric_textarea" ng-init="aPortraitDrawSpeed=4000" ng-model="aPortraitDrawSpeed"/>ミリ秒<br><br>
 
-        <input type="button" value="開始" ng-click="ctrl.startEndRoll()"/>
-      </form>
-    </div>
+                ラストメッセージを、どうぞ:
+                <input type="text" ng-init="endMessage='Thanks for watching !'" ng-model="endMessage"/><br>
+                ラストメッセージの表示時間:
+                <input type="text" class="numeric_textarea" ng-init="endMessageViewSec=5.0" ng-model="endMessageViewSec"/>秒<br><br>
+                フォントサイズ:
+                <input type="text" class="numeric_textarea" ng-init="endMessageFontSize=72.0" ng-model="endMessageFontSize"/>px<br>
+                <!-- -- -- -- TODO: コンボボックスじゃない感 -- -- -- -->
+                フォント色:
+                <select id="end_message_font_color" value="Black" ng-init="endMessageFontColor='White'" ng-model="endMessageFontColor">
+                    <option class="option_black">Black</option>
+                    <option class="option_white">White</option>
+                </select><br><br>
 
-    <div id="credits" ng-show="endrollStarted">
-      <ul id="credit_lines">
-        <li id="credit_line" ng-bind="creditLine" ng-repeat="creditLine in creditLines track by $index"></li>
-      </ul>
-    </div>
+                <input type="button" value="開始" ng-click="ctrl.startEndRoll()"/>
+            </form>
+        </div>
 
-    <img id="portrait" src="{{ portraitSrc }}" alt="{{ portraitAlt }}"><br>
+        <div id="credits" class="marquee_area" ng-show="endrollStarted" ng-style="creditsCSSStyle">
+            <p ng-bind="creditLine" ng-repeat="creditLine in creditLines track by $index"></p>
+        </div>
 
-    <p id="end_message" ng-bind="endMessage" ng-show="endrollFinished"></p>
-  </body>
+        <img id="portrait" src="{{ portraitSrc }}" alt="{{ portraitAlt }}"><br>
+
+        <p id="end_message" ng-bind="endMessage" ng-show="endrollFinished"></p>
+    </body>
 </html>

@@ -27,7 +27,7 @@ body {
 }
 
 #credits {
-    width: 30%;
+    width: 40%;
     font-weight: bold;
     float: left;
 }
@@ -36,17 +36,24 @@ body {
     list-style: none;
 }
 
-#credit_line {
-    margin-bottom: 10px;
-}
-
 #portrait {
-    width: 70%;
-    height: 50%;
+    height: 30%;
+    width: 60%;
     float: right;
 }
 
 /* NOTE: could not function */
 #end_message {
     margin: 0 auto;
+}
+
+.marquee_area {
+    overflow: hidden;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+/* marquee item must be surrond <p> */
+.marquee_area p {
+    display: table-row;
 }

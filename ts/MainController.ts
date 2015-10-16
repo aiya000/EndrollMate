@@ -1,6 +1,6 @@
 /// <reference path="./typings/jquery/jquery.d.ts"/>
-/// <reference path="./typings/jquery.tvcredits/jquery.tvcredits.d.ts"/>
 /// <reference path="./typings/ng-file-upload/ng-file-upload.d.ts"/>
+/// <reference path="./jquery.keyframes.d.ts/typings/jquery.keyframes.d.ts" />
 /// <reference path="./MainScope.ts"/>
 /// <reference path="./Maybe.ts"/>
 /// <reference path="./Util.ts" />
@@ -12,6 +12,11 @@ import IDeferred = ng.IDeferred;
  * @classdesc DocumentRoot/index.html <body>配下のコントロール
  */
 class MainController {
+	/* --- --- --- private const field --- --- --- */
+	//TODO: why happened parse error ?
+	//private const SCROLL_ANIMATION_NAME: string = "marquee";
+	private SCROLL_ANIMATION_NAME: string = "marquee";
+
 	/* --- --- --- private field --- --- --- */
 	/**
 	 * index.htmlとの双方向データバインディングに使用されます。
@@ -65,6 +70,7 @@ class MainController {
 	 * @param {FileList} $files 唯一の要素のあるファイルリスト(選択した1つの画像ファイルのあるリスト)
 	 */
 	public setBackgroundImage($files: FileList) : void {
+		console.log(this.$scope);
 		this.bgImage = $files[0];  //NOTE: TypeError ｲﾐﾜｶﾝﾅｲ!!
 	}
 
@@ -76,7 +82,7 @@ class MainController {
 		let file: File = $files[0];  //NOTE: TypeError ｲﾐﾜｶﾝﾅｲ!!
 		let fileReader = new FileReader();
 		let setRollLines: EventListener = e => {
-			this.$scope.creditLines = fileReader.result.split("\n");
+			this.$scope.creditLines = fileReader.result.split("\n").map((x,i) => x + "　");
 		};
 		fileReader.addEventListener("load", setRollLines);
 		fileReader.readAsText(file);
@@ -102,6 +108,8 @@ class MainController {
 		}
 		this.$scope.endrollStarted = true;
 		this.implantBackgroundImage();
+		this.$scope.creditsCSSStyle = new FontColorCSS({ color: this.$scope.creditsFontColor });
+
 		let endrollPicturePromise: IPromise<void> = this.startDrawingPortraits();
 		let endrollCreditsPromise: IPromise<void> = this.startRisingCreditLines();
 		this.$q.all([endrollPicturePromise, endrollCreditsPromise]).then(() => {
@@ -188,34 +196,40 @@ class MainController {
 	 * @return エンドロールテキストの描画終了通知
 	 */
 	private startRisingCreditLines() : IPromise<void> {
+		//TODO: notify completion
 		let defer: IDeferred<any> = this.$q.defer();
-		let creditsHeight: number = this.calcCreditsHeight();
-		$("#credits").css(<Object>{
-			"margin-top"    : -creditsHeight,
-			"margin-bottom" : creditsHeight,
-			"font-size"     : this.$scope.creditsFontSize + "px",
-			"color"         : this.$scope.creditsFontColor
-		});
-		$("#credits").tvCredits({
-			height   : creditsHeight * 2.0,    // credit_linesの高さ + 画面の下に潜らせるためのcredit_linesの高さ
-			speed    : this.$scope.creditsRiseSpeed,
-			complete : () => {
-				$("#credits").text("");  // suppress automatic infinity loop
-				defer.resolve();         // notify complete
-			}
-		});
+		this.startScrollCredits();
 		return defer.promise;
 	}
 
 	/**
-	 * 受け取ったエンドロールテキスト用テキストファイルを元に
-	 * エンドロールテキスト全体の高さ(px)を返します。
-	 * @return エンドロールテキスト全体の高さ(px)
+	 * エンドロールテキストのスクロールを開始します。
+	 * スクロールは下から上へ行われます。
 	 */
-	private calcCreditsHeight() : number {
-		let lineNum: number       = $("#credit_lines li").length + 2;  //NOTE: 2 <- ??
-		let oneLineMargin: number = parseInt($("#credit_lines li").css("margin-bottom"));  // pixel to number
-		let oneLineHeight: number = this.$scope.creditsFontSize + oneLineMargin;
-		return oneLineHeight * lineNum;
+	private startScrollCredits() {
+		this.defineKeyframes();
+		// エンドロールテキストのスクロールにかける時間
+		// (scrollFullTime秒後にテキストは流れきります)
+		let scrollFullTime: number = this.$scope.creditsRiseSpeed;
+		let creditsNum:     number = $("#credits").children().length;
+		$("#credits").css({
+			"animation-name"            : this.SCROLL_ANIMATION_NAME,
+			"animation-timing-function" : "linear",
+			"animation-duration"        : scrollFullTime * creditsNum + "s",
+			"animation-iteration-count" : 1
+		});
+	}
+
+	/**
+	 * $.keyframeにスクロール用のアニメーションを定義します。
+	 * この定義はJQueryStatic#css("animation-*foo*")に使用されます。
+	 */
+	private defineKeyframes() : void {
+		let heightAsPercent: number = $("#credits").children().length * 100;
+		$.keyframe.define([{
+			"name" : this.SCROLL_ANIMATION_NAME,
+			"from" : { transform: "translate(0%,0%);" },
+			"to"   : { transform: "translate(0%,-" + heightAsPercent + "%);" }
+		}]);
 	}
 }

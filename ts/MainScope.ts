@@ -5,6 +5,7 @@
 // クレジットを「エンドロールクレジット」と呼称します。
 
 /// <reference path="./typings/angularjs/angular.d.ts"/>
+/// <reference path="./FontColorCSS.ts"/>
 
 interface MainScope extends ng.IScope {
 
@@ -36,6 +37,11 @@ interface MainScope extends ng.IScope {
 	 * エンドロールクレジットのフォントカラーを指定します。
 	 */
 	creditsFontColor: string;
+
+	/**
+	 * エンドロールテキストのCSSを表します。
+	 */
+	creditsCSSStyle: FontColorCSS;
 
 	/**
 	 * エンドロールが既に始まっているか否かを示します。
