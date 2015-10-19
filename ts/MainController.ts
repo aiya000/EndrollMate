@@ -1,11 +1,16 @@
 /// <reference path="./typings/jquery/jquery.d.ts"/>
 /// <reference path="./typings/ng-file-upload/ng-file-upload.d.ts"/>
 /// <reference path="./jquery.keyframes.d.ts/typings/jquery.keyframes.d.ts" />
+/// <reference path="./Control/CSS/Keyframes.ts"/>
+/// <reference path="./Data/Maybe/Maybe.ts"/>
+/// <reference path="./Data/CSS/FontColorCSS.ts" />
 /// <reference path="./MainScope.ts"/>
-/// <reference path="./Maybe.ts"/>
 /// <reference path="./Util.ts" />
-import IPromise  = ng.IPromise;
-import IDeferred = ng.IDeferred;
+
+import IPromise     = ng.IPromise;
+import IDeferred    = ng.IDeferred;
+import Maybe        = Data.Maybe.Maybe;
+import FontColorCSS = Data.CSS.FontColorCSS;
 
 
 /**
@@ -13,7 +18,7 @@ import IDeferred = ng.IDeferred;
  */
 class MainController {
 	/* --- --- --- private const field --- --- --- */
-	//TODO: why happened parse error ?
+	//FIXME: why happened parse error ?
 	//private const SCROLL_ANIMATION_NAME: string = "marquee";
 	private SCROLL_ANIMATION_NAME: string = "marquee";
 
@@ -82,6 +87,7 @@ class MainController {
 		let file: File = $files[0];  //NOTE: TypeError ｲﾐﾜｶﾝﾅｲ!!
 		let fileReader = new FileReader();
 		let setRollLines: EventListener = e => {
+			//TODO: if x is null, cannot reflect an item. fix to pretty method
 			this.$scope.creditLines = fileReader.result.split("\n").map((x,i) => x + "　");
 		};
 		fileReader.addEventListener("load", setRollLines);
@@ -207,7 +213,7 @@ class MainController {
 	 * スクロールは下から上へ行われます。
 	 */
 	private startScrollCredits() {
-		this.defineKeyframes();
+		Control.CSS.defineMarqueeAnimation(this.SCROLL_ANIMATION_NAME, $("#credits").children().length);
 		// エンドロールテキストのスクロールにかける時間
 		// (scrollFullTime秒後にテキストは流れきります)
 		let scrollFullTime: number = this.$scope.creditsRiseSpeed;
@@ -220,16 +226,4 @@ class MainController {
 		});
 	}
 
-	/**
-	 * $.keyframeにスクロール用のアニメーションを定義します。
-	 * この定義はJQueryStatic#css("animation-*foo*")に使用されます。
-	 */
-	private defineKeyframes() : void {
-		let heightAsPercent: number = $("#credits").children().length * 100;
-		$.keyframe.define([{
-			"name" : this.SCROLL_ANIMATION_NAME,
-			"from" : { transform: "translate(0%,0%);" },
-			"to"   : { transform: "translate(0%,-" + heightAsPercent + "%);" }
-		}]);
-	}
 }

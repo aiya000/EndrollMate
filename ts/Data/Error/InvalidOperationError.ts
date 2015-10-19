@@ -2,7 +2,7 @@
  * 独自定義の例外を格納します。
  * @namespace
  */
-module Exceptions {
+namespace Exception {
 	/**
 	 * @classdesc メソッドの引数以外が原因で処理が無効になった場合に投げられます
 	 */

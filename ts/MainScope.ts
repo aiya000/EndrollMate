@@ -5,7 +5,7 @@
 // クレジットを「エンドロールクレジット」と呼称します。
 
 /// <reference path="./typings/angularjs/angular.d.ts"/>
-/// <reference path="./FontColorCSS.ts"/>
+/// <reference path="./Data/CSS/FontColorCSS.ts"/>
 
 interface MainScope extends ng.IScope {
 

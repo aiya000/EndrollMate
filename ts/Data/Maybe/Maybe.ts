@@ -1,13 +1,13 @@
 // thanks http://d.hatena.ne.jp/m-hiyama/20150325/1427260591
 
-/// <reference path="./InvalidOperationError.ts"/>
-import InvalidOperationError = Exceptions.InvalidOperationError;
+/// <reference path="../Error/InvalidOperationError.ts"/>
+import InvalidOperationError = Exception.InvalidOperationError;
 
 /**
  * Maybeを表す型と値を格納します。
  * @namespace
  */
-namespace Maybe {
+namespace Data.Maybe.Maybe {
 	/**
 	 * 「データを持っているかもしれないし持っていないかもしれない」ことを表します。
 	 *
