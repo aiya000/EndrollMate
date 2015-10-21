@@ -56,11 +56,6 @@ interface MainScope extends ng.IScope {
 	portraitSrc: string;
 
 	/**
-	 * 実際の<img>タグのalt属性に紐付けます。
-	 */
-	portraitAlt: string;
-
-	/**
 	 * エンドロールが終了したか否か意を示します。
 	 */
 	endrollFinished: boolean;

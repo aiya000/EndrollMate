@@ -170,11 +170,10 @@ class MainController {
 		//TODO: assert this.portraits != null
 		// this.$scope.aPortraitDrawSpeedは
 		// 実際「エンドロールピクチャのうちの1つのピクチャ(=portrait)を描画するための時間」だ
-		// portraitsのうちdrawnPortraitNum番目の画像をthis.$scope.aPortraitDrawSpeedミリ秒描画します
+		// this.portraitsのうちdrawnPortraitNum番目の画像をthis.$scope.aPortraitDrawSpeedミリ秒描画します
 		let [fadeMillis, viewMillis]: [number, number] = Util.splitFadeAndViewMillis(this.$scope.aPortraitDrawSpeed);
 		let drawnPortraitNum: number = 0;  // 描画済みの画像の数
 		let drawPortraits: Function  = () => this.drawAPortrait(this.portraits[drawnPortraitNum++], fadeMillis, viewMillis);
-		this.$scope.portraitAlt      = "endroll-portrait";
 		this.$interval(drawPortraits, this.$scope.aPortraitDrawSpeed, this.portraits.length);
 		return this.$timeout(this.$scope.aPortraitDrawSpeed * (this.portraits.length + 2));  //NOTE: 2 <- ??
 	}
