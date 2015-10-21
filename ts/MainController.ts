@@ -202,10 +202,17 @@ class MainController {
 	 * @return エンドロールテキストの描画終了通知
 	 */
 	private startRisingCreditLines() : IPromise<void> {
-		//TODO: notify completion
-		let defer: IDeferred<any> = this.$q.defer();
+		let deferred: IDeferred<any> = this.$q.defer();
+		let positionTop: number      = $("#credits").height();
+		this.$timeout(() => {
+			let currentTop: number = $("#credits").position().top;
+			if (currentTop <= 0) {
+				deferred.resolve();
+				this.$timeout.cancel();
+			}
+		}, 500);
 		this.startScrollCredits();
-		return defer.promise;
+		return deferred.promise;
 	}
 
 	/**
