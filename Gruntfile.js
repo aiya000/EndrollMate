@@ -5,13 +5,14 @@ module.exports = function (grunt) {
 		typescript : {
 			main : {
 				src : [
+					"ts/Control/CSS/Keyframes.ts",
+					"ts/Data/CSS/FontColorCSS.ts",
+					"ts/Data/Error/InvalidOperationError.ts",
+					"ts/Data/Maybe/Maybe.ts",
 					"ts/index.ts",
 					"ts/MainController.ts",
 					"ts/MainScope.ts",
-					"ts/Maybe.ts",
-					"ts/InvalidOperationError.ts",
-					"ts/Util.ts",
-					"ts/ascroller.ts"
+					"ts/Util.ts"
 				],
 				dest : "ts/es6/index.js",
 				options : {

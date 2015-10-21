@@ -61,7 +61,6 @@ class MainController {
 	 * @constructor
 	 */
 	constructor($scope: MainScope, $interval: ng.IIntervalService, $timeout: ng.ITimeoutService, $q: ng.IQService) {
-		// モジュールの設定
 		this.$scope    = $scope;
 		this.$interval = $interval;
 		this.$timeout  = $timeout;
@@ -75,7 +74,6 @@ class MainController {
 	 * @param {FileList} $files 唯一の要素のあるファイルリスト(選択した1つの画像ファイルのあるリスト)
 	 */
 	public setBackgroundImage($files: FileList) : void {
-		console.log(this.$scope);
 		this.bgImage = $files[0];  //NOTE: TypeError ｲﾐﾜｶﾝﾅｲ!!
 	}
 
@@ -168,8 +166,8 @@ class MainController {
 	 */
 	private startDrawingPortraits() : IPromise<void> {
 		//TODO: assert this.portraits != null
-		// this.$scope.aPortraitDrawSpeedは
-		// 実際「エンドロールピクチャのうちの1つのピクチャ(=portrait)を描画するための時間」だ
+		// 実際this.$scope.aPortraitDrawSpeedは
+		// 「エンドロールピクチャのうちの1つのピクチャ(=portrait)を描画するための時間」だ
 		// portraitsのうちdrawnPortraitNum番目の画像をthis.$scope.aPortraitDrawSpeedミリ秒描画します
 		let [fadeMillis, viewMillis]: [number, number] = Util.splitFadeAndViewMillis(this.$scope.aPortraitDrawSpeed);
 		let drawnPortraitNum: number = 0;  // 描画済みの画像の数
@@ -203,7 +201,7 @@ class MainController {
 	 */
 	private startRisingCreditLines() : IPromise<void> {
 		//TODO: notify completion
-		let defer: IDeferred<any> = this.$q.defer();
+		let defer: IDeferred<any> = this.$q.defer();  // :: IDeferred<void>
 		this.startScrollCredits();
 		return defer.promise;
 	}
