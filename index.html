@@ -8,7 +8,8 @@
         <script src="./js/bower_components/angular/angular.min.js"></script>
         <script src="./js/bower_components/jquery/dist/jquery.min.js"></script>
         <script src="./js/bower_components/ng-file-upload/ng-file-upload.min.js"></script>
-        <script src="./js/tvcredits/tvcredits.jquery.min.js"></script>
+        <script src="./js/bower_components/prefixfree/prefixfree.min.js"></script>
+        <script src="./js/bower_components/jQueryKeyframes/jquery.keyframes.min.js"></script>
         -->
         <script src="./js/bower_components/angular/angular.js"></script>
         <script src="./js/bower_components/jquery/dist/jquery.js"></script>
@@ -29,12 +30,12 @@
                 <!-- -- -- -- TODO: グループボックスの設置 -- -- -- -->
                 エンドロールテキスト設定<br>
                 流れる速さ (数字が大きいほど遅い):
-                <input type="text" class="numeric_textarea" ng-init="creditsRiseSpeed=300" ng-model="creditsRiseSpeed" require/><br>
+                <input type="text" class="numeric_textarea" ng-model="creditsRiseSpeed" ng-init="creditsRiseSpeed=30" require/><br>
                 フォントサイズ:
-                <input type="text" class="numeric_textarea" ng-init="creditsFontSize=24.0" ng-model="creditsFontSize"/>px<br>
+                <input type="text" class="numeric_textarea" ng-model="creditsFontSize" ng-init="creditsFontSize=24.0"/>px<br>
                 <!-- -- -- -- TODO: コンボボックスじゃない感 -- -- -- -->
                 フォント色:
-                <select id="credits_font_color" value="Black" ng-init="creditsFontColor='White'" ng-model="creditsFontColor">
+                <select id="credits_font_color" value="Black" ng-model="creditsFontColor" ng-init="creditsFontColor='White'">
                     <option class="option_black">Black</option>
                     <option class="option_white">White</option>
                 </select><br><br>
@@ -45,17 +46,17 @@
                 <!-- -- -- -- TODO: グループボックスの設置 -- -- -- -->
                 エンドロールピクチャ設定<br>
                 ピクチャ1枚に対する描画間隔:
-                <input type="text" class="numeric_textarea" ng-init="aPortraitDrawSpeed=4000" ng-model="aPortraitDrawSpeed"/>ミリ秒<br><br>
+                <input type="text" class="numeric_textarea" ng-model="aPortraitDrawSpeed" ng-init="aPortraitDrawSpeed=4000"/>ミリ秒<br><br>
 
                 ラストメッセージを、どうぞ:
                 <input type="text" ng-init="endMessage='Thanks for watching !'" ng-model="endMessage"/><br>
                 ラストメッセージの表示時間:
-                <input type="text" class="numeric_textarea" ng-init="endMessageViewSec=5.0" ng-model="endMessageViewSec"/>秒<br><br>
+                <input type="text" class="numeric_textarea" ng-model="endMessageViewSec" ng-init="endMessageViewSec=5.0"/>秒<br><br>
                 フォントサイズ:
-                <input type="text" class="numeric_textarea" ng-init="endMessageFontSize=72.0" ng-model="endMessageFontSize"/>px<br>
+                <input type="text" class="numeric_textarea" ng-model="endMessageFontSize" ng-init="endMessageFontSize=72.0"/>px<br>
                 <!-- -- -- -- TODO: コンボボックスじゃない感 -- -- -- -->
                 フォント色:
-                <select id="end_message_font_color" value="Black" ng-init="endMessageFontColor='White'" ng-model="endMessageFontColor">
+                <select id="end_message_font_color" value="Black" ng-model="endMessageFontColor" ng-init="endMessageFontColor='White'">
                     <option class="option_black">Black</option>
                     <option class="option_white">White</option>
                 </select><br><br>
@@ -64,11 +65,11 @@
             </form>
         </div>
 
-        <div id="credits" class="marquee_area" ng-show="endrollStarted" ng-style="creditsCSSStyle">
+        <div id="credits" class="marquee_area" ng-show="endrollStarted">
             <p ng-bind="creditLine" ng-repeat="creditLine in creditLines track by $index"></p>
         </div>
 
-        <img id="portrait" src="{{ portraitSrc }}" alt="{{ portraitAlt }}"><br>
+        <img id="portrait" src="{{ portraitSrc }}"><br>
 
         <p id="end_message" ng-bind="endMessage" ng-show="endrollFinished"></p>
     </body>

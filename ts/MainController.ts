@@ -168,11 +168,10 @@ class MainController {
 		//TODO: assert this.portraits != null
 		// 実際this.$scope.aPortraitDrawSpeedは
 		// 「エンドロールピクチャのうちの1つのピクチャ(=portrait)を描画するための時間」だ
-		// portraitsのうちdrawnPortraitNum番目の画像をthis.$scope.aPortraitDrawSpeedミリ秒描画します
+		// this.portraitsのうちdrawnPortraitNum番目の画像をthis.$scope.aPortraitDrawSpeedミリ秒描画します
 		let [fadeMillis, viewMillis]: [number, number] = Util.splitFadeAndViewMillis(this.$scope.aPortraitDrawSpeed);
 		let drawnPortraitNum: number = 0;  // 描画済みの画像の数
 		let drawPortraits: Function  = () => this.drawAPortrait(this.portraits[drawnPortraitNum++], fadeMillis, viewMillis);
-		this.$scope.portraitAlt      = "endroll-portrait";
 		this.$interval(drawPortraits, this.$scope.aPortraitDrawSpeed, this.portraits.length);
 		return this.$timeout(this.$scope.aPortraitDrawSpeed * (this.portraits.length + 2));  //NOTE: 2 <- ??
 	}
@@ -200,10 +199,17 @@ class MainController {
 	 * @return エンドロールテキストの描画終了通知
 	 */
 	private startRisingCreditLines() : IPromise<void> {
-		//TODO: notify completion
-		let defer: IDeferred<any> = this.$q.defer();  // :: IDeferred<void>
+		let deferred: IDeferred<any> = this.$q.defer();
+		let positionTop: number      = $("#credits").height();
+		this.$timeout(() => {
+			let currentTop: number = $("#credits").position().top;
+			if (currentTop <= 0) {
+				deferred.resolve();
+				this.$timeout.cancel();
+			}
+		}, 500);
 		this.startScrollCredits();
-		return defer.promise;
+		return deferred.promise;
 	}
 
 	/**
