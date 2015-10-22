@@ -7,10 +7,11 @@
 /// <reference path="./MainScope.ts"/>
 /// <reference path="./Util.ts" />
 
-import IPromise     = ng.IPromise;
-import IDeferred    = ng.IDeferred;
-import Maybe        = Data.Maybe.Maybe;
-import FontColorCSS = Data.CSS.FontColorCSS;
+import IPromise       = ng.IPromise;
+import IDeferred      = ng.IDeferred;
+import IUploadService = angular.angularFileUpload.IUploadService;
+import Maybe          = Data.Maybe.Maybe;
+import FontColorCSS   = Data.CSS.FontColorCSS;
 
 
 /**
@@ -54,17 +55,22 @@ class MainController {
 	 */
 	private portraits: FileList;
 
+	/**
+	 * TODO: 書く
+	 */
+	private Upload: IUploadService
 
 	/* --- --- --- public constructor --- --- --- */
 	/**
 	 * 使用するAngularJSのオブジェクトを受け取ります
 	 * @constructor
 	 */
-	constructor($scope: MainScope, $interval: ng.IIntervalService, $timeout: ng.ITimeoutService, $q: ng.IQService) {
+		constructor($scope: MainScope, $interval: ng.IIntervalService, $timeout: ng.ITimeoutService, $q: ng.IQService, Upload: IUploadService) {
 		this.$scope    = $scope;
 		this.$interval = $interval;
 		this.$timeout  = $timeout;
 		this.$q        = $q;
+		this.Upload    = Upload;
 	}
 
 
@@ -81,15 +87,18 @@ class MainController {
 	 * エンドロールに使用するテキストファイルを設定します
 	 * @param {FileList} $files エンドロールに使用する1つのテキストファイル
 	 */
-	public setCreditText($files: FileList) : void {
-		let file: File = $files[0];  //NOTE: TypeError ｲﾐﾜｶﾝﾅｲ!!
+	public setCreditText($files: FileList, $errFiles: FileList) : void {
+		let file: File = $files[0];
 		let fileReader = new FileReader();
-		let setRollLines: EventListener = e => {
-			//TODO: if x is null, cannot reflect an item. fix to pretty method
-			this.$scope.creditLines = fileReader.result.split("\n").map((x,i) => x + "　");
-		};
-		fileReader.addEventListener("load", setRollLines);
-		fileReader.readAsText(file);
+		this.Upload.upload({ method: "POST", url: "https://angular-file-upload-cors-srv.appspot.com/upload", file: file })
+			.then((response: any) => {
+				let setCredits: EventListener = e => {
+				//TODO: if x is null, cannot reflect an item. fix to pretty method
+					this.$scope.creditLines = fileReader.result.split("\n").map((x,i) => x + "　");
+				};
+				fileReader.addEventListener("load", setCredits);
+				fileReader.readAsText(file);
+			});
 	}
 
 	/**
@@ -165,6 +174,8 @@ class MainController {
 	 * @return エンドロールピクチャの描画終了通知
 	 */
 	private startDrawingPortraits() : IPromise<void> {
+		//TODO: why this var redefine to str ?
+		this.$scope.aPortraitDrawSpeed = Number(this.$scope.aPortraitDrawSpeed);
 		//TODO: assert this.portraits != null
 		// 実際this.$scope.aPortraitDrawSpeedは
 		// 「エンドロールピクチャのうちの1つのピクチャ(=portrait)を描画するための時間」だ
@@ -172,8 +183,11 @@ class MainController {
 		let [fadeMillis, viewMillis]: [number, number] = Util.splitFadeAndViewMillis(this.$scope.aPortraitDrawSpeed);
 		let drawnPortraitNum: number = 0;  // 描画済みの画像の数
 		let drawPortraits: Function  = () => this.drawAPortrait(this.portraits[drawnPortraitNum++], fadeMillis, viewMillis);
-		this.$interval(drawPortraits, this.$scope.aPortraitDrawSpeed, this.portraits.length);
-		return this.$timeout(this.$scope.aPortraitDrawSpeed * (this.portraits.length + 2));  //NOTE: 2 <- ??
+		//this.$interval(drawPortraits, this.$scope.aPortraitDrawSpeed, this.portraits.length);
+		//return this.$timeout(this.$scope.aPortraitDrawSpeed * (this.portraits.length + 2));  //NOTE: 2 <- ??
+		//TODO: optimize interval 500
+		this.$interval(drawPortraits, this.$scope.aPortraitDrawSpeed + 1000, this.portraits.length);
+		return this.$timeout((this.$scope.aPortraitDrawSpeed * (this.portraits.length + 1)) + (1000 * this.portraits.length));
 	}
 
 	/**
@@ -200,16 +214,30 @@ class MainController {
 	 */
 	private startRisingCreditLines() : IPromise<void> {
 		let deferred: IDeferred<any> = this.$q.defer();
+		let promise: IPromise<any>   = deferred.promise;
 		let positionTop: number      = $("#credits").height();
-		this.$timeout(() => {
-			let currentTop: number = $("#credits").position().top;
-			if (currentTop <= 0) {
+		//TODO: $interval使うとstartDrawingPortraits()の$interval()とコンフリクトして挙動が変になるの直して$interval使う
+		//this.$interval(() => {
+		//	let currentTop: number = Math.abs($("#credits").position().top);
+		//	if (currentTop >= positionTop) {
+		//		deferred.resolve();
+		//		this.$interval.cancel(promise);
+		//	}
+		//}, 500);
+		//TODO: まともなコメント書く
+		// どんどん上に上がっていってpositionTopまで行く
+		console.log(positionTop);
+		let f: Function = () => {
+			let currentTop: number = Math.abs($("#credits").position().top);
+			if (currentTop >= positionTop) {
 				deferred.resolve();
-				this.$timeout.cancel();
+				return;
 			}
-		}, 500);
+			setTimeout(f, 500);
+		};
+		setTimeout(f, 500);
 		this.startScrollCredits();
-		return deferred.promise;
+		return promise;
 	}
 
 	/**

@@ -25,7 +25,7 @@
                 <input type="file" accept="image/*" ngf-select="ctrl.setBackgroundImage($files)"/><br><br>
 
                 エンドロールに使用するテキストを選択してください.<br>
-                <input type="file" ngf-select="ctrl.setCreditText($files)"/><br><br>
+                <button ngf-select="ctrl.setCreditText($files, $errFiles)">SelectFile</button><br><br>
 
                 <!-- -- -- -- TODO: グループボックスの設置 -- -- -- -->
                 エンドロールテキスト設定<br>
@@ -65,7 +65,8 @@
             </form>
         </div>
 
-        <div id="credits" class="marquee_area" ng-show="endrollStarted">
+        <!--TODO: <div id="credits" class="marquee_area" ng-show="endrollStarted">-->
+        <div id="credits" class="marquee_area">
             <p ng-bind="creditLine" ng-style="creditsCSSStyle" ng-repeat="creditLine in creditLines track by $index"></p>
         </div>
 
