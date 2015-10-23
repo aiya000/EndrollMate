@@ -65,11 +65,12 @@
             </form>
         </div>
 
-        <div id="credits" class="marquee_area">
-            <p ng-bind="creditLine" ng-style="creditsCSSStyle" ng-repeat="creditLine in creditLines track by $index"></p>
+        <div>
+            <div id="credits" class="marquee_area">
+                <p ng-bind="creditLine" ng-style="creditsCSSStyle" ng-repeat="creditLine in creditLines track by $index"></p>
+            </div>
+            <img id="portrait" src="{{ portraitSrc }}"><br>
         </div>
-
-        <img id="portrait" src="{{ portraitSrc }}"><br>
 
         <p id="end_message" ng-bind="endMessage" ng-show="endrollFinished"></p>
     </body>
