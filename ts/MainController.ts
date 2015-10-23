@@ -1,15 +1,14 @@
 /// <reference path="./typings/jquery/jquery.d.ts"/>
 /// <reference path="./typings/ng-file-upload/ng-file-upload.d.ts"/>
-/// <reference path="./jquery.keyframes.d.ts/typings/jquery.keyframes.d.ts" />
+/// <reference path="./jquery.keyframes.d.ts/typings/jquery.keyframes.d.ts"/>
 /// <reference path="./Control/CSS/Keyframes.ts"/>
 /// <reference path="./Data/Maybe/Maybe.ts"/>
-/// <reference path="./Data/CSS/FontColorCSS.ts" />
+/// <reference path="./Data/CSS/FontColorCSS.ts"/>
 /// <reference path="./MainScope.ts"/>
-/// <reference path="./Util.ts" />
+/// <reference path="./Util.ts"/>
 
 import IPromise       = ng.IPromise;
 import IDeferred      = ng.IDeferred;
-import IUploadService = angular.angularFileUpload.IUploadService;
 import Maybe          = Data.Maybe.Maybe;
 import FontColorCSS   = Data.CSS.FontColorCSS;
 
@@ -19,7 +18,7 @@ import FontColorCSS   = Data.CSS.FontColorCSS;
  */
 class MainController {
 	/* --- --- --- private const field --- --- --- */
-	//FIXME: why happened parse error ?
+	//TODO: why happened parse error ?
 	//private const SCROLL_ANIMATION_NAME: string = "marquee";
 	private SCROLL_ANIMATION_NAME: string = "marquee";
 
@@ -45,7 +44,8 @@ class MainController {
 	private $q: ng.IQService;
 
 	/**
-	 * TODO: 書く
+	 * エンドロールが開始された直後に
+	 * <body>のbackground-image属性として設定されます。
 	 */
 	private bgImage: File;
 
@@ -55,22 +55,16 @@ class MainController {
 	 */
 	private portraits: FileList;
 
-	/**
-	 * TODO: 書く
-	 */
-	private Upload: IUploadService
-
 	/* --- --- --- public constructor --- --- --- */
 	/**
 	 * 使用するAngularJSのオブジェクトを受け取ります
 	 * @constructor
 	 */
-		constructor($scope: MainScope, $interval: ng.IIntervalService, $timeout: ng.ITimeoutService, $q: ng.IQService, Upload: IUploadService) {
+		constructor($scope: MainScope, $interval: ng.IIntervalService, $timeout: ng.ITimeoutService, $q: ng.IQService) {
 		this.$scope    = $scope;
 		this.$interval = $interval;
 		this.$timeout  = $timeout;
 		this.$q        = $q;
-		this.Upload    = Upload;
 	}
 
 
@@ -80,25 +74,22 @@ class MainController {
 	 * @param {FileList} $files 唯一の要素のあるファイルリスト(選択した1つの画像ファイルのあるリスト)
 	 */
 	public setBackgroundImage($files: FileList) : void {
-		this.bgImage = $files[0];  //NOTE: TypeError ｲﾐﾜｶﾝﾅｲ!!
+		this.bgImage = $files[0];
 	}
 
 	/**
 	 * エンドロールに使用するテキストファイルを設定します
 	 * @param {FileList} $files エンドロールに使用する1つのテキストファイル
 	 */
-	public setCreditText($files: FileList, $errFiles: FileList) : void {
+	public setCreditText($files: FileList) : void {
 		let file: File = $files[0];
 		let fileReader = new FileReader();
-		this.Upload.upload({ method: "POST", url: "https://angular-file-upload-cors-srv.appspot.com/upload", file: file })
-			.then((response: any) => {
-				let setCredits: EventListener = e => {
-				//TODO: if x is null, cannot reflect an item. fix to pretty method
-					this.$scope.creditLines = fileReader.result.split("\n").map((x,i) => x + "　");
-				};
-				fileReader.addEventListener("load", setCredits);
-				fileReader.readAsText(file);
-			});
+		let setCredits: EventListener = e => {
+			//TODO: if x is null, cannot reflect an item. fix to pretty method
+			this.$scope.creditLines = fileReader.result.split("\n").map((x,i) => x + "　");
+		};
+		fileReader.addEventListener("load", setCredits);
+		fileReader.readAsText(file);
 	}
 
 	/**
@@ -174,20 +165,21 @@ class MainController {
 	 * @return エンドロールピクチャの描画終了通知
 	 */
 	private startDrawingPortraits() : IPromise<void> {
-		//TODO: why this var redefine to str ?
+		// asyncな画像切り替え処理のインターバルに余裕を持たせる
+		const OPERATION_MARGIN: number = 1000.0;
+		//TODO: why this var cast from str ?
 		this.$scope.aPortraitDrawSpeed = Number(this.$scope.aPortraitDrawSpeed);
-		//TODO: assert this.portraits != null
 		// 実際this.$scope.aPortraitDrawSpeedは
 		// 「エンドロールピクチャのうちの1つのピクチャ(=portrait)を描画するための時間」だ
 		// this.portraitsのうちdrawnPortraitNum番目の画像をthis.$scope.aPortraitDrawSpeedミリ秒描画します
 		let [fadeMillis, viewMillis]: [number, number] = Util.splitFadeAndViewMillis(this.$scope.aPortraitDrawSpeed);
-		let drawnPortraitNum: number = 0;  // 描画済みの画像の数
-		let drawPortraits: Function  = () => this.drawAPortrait(this.portraits[drawnPortraitNum++], fadeMillis, viewMillis);
-		//this.$interval(drawPortraits, this.$scope.aPortraitDrawSpeed, this.portraits.length);
-		//return this.$timeout(this.$scope.aPortraitDrawSpeed * (this.portraits.length + 2));  //NOTE: 2 <- ??
-		//TODO: optimize interval 500
-		this.$interval(drawPortraits, this.$scope.aPortraitDrawSpeed + 1000, this.portraits.length);
-		return this.$timeout((this.$scope.aPortraitDrawSpeed * (this.portraits.length + 1)) + (1000 * this.portraits.length));
+		let drawnPortraitNum: number       = 0;  // 描画済みの画像の数
+		let drawPortraits: Function        = () => this.drawAPortrait(this.portraits[drawnPortraitNum++], fadeMillis, viewMillis);
+		let drawSpeedIncludeMargin: number = this.$scope.aPortraitDrawSpeed + OPERATION_MARGIN;
+		let timeOfFinishingDraw:    number = drawSpeedIncludeMargin * (this.portraits.length + 1);
+		this.$interval(drawPortraits, drawSpeedIncludeMargin, this.portraits.length);
+		// 全てのピクチャの描画が終わる時間に終了を通知する
+		return this.$timeout(timeOfFinishingDraw);
 	}
 
 	/**
@@ -224,18 +216,16 @@ class MainController {
 		//		this.$interval.cancel(promise);
 		//	}
 		//}, 500);
-		//TODO: まともなコメント書く
-		// どんどん上に上がっていってpositionTopまで行く
-		console.log(positionTop);
-		let f: Function = () => {
+		// 全ての#creditsの子が画面上限の上に流れきった時にPromiseに通知する
+		let watchScrollEnd: Function = () => {
 			let currentTop: number = Math.abs($("#credits").position().top);
 			if (currentTop >= positionTop) {
 				deferred.resolve();
 				return;
 			}
-			setTimeout(f, 500);
+			setTimeout(watchScrollEnd, 500);
 		};
-		setTimeout(f, 500);
+		setTimeout(watchScrollEnd, 500);
 		this.startScrollCredits();
 		return promise;
 	}

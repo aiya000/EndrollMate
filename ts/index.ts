@@ -3,4 +3,4 @@
 /// <reference path="./MainScope.ts"/>
 
 let appEndrollMate = angular.module("appEndrollMate", ["ngFileUpload"]);
-appEndrollMate.controller("MainController", ["$scope", "$interval", "$timeout", "$q", "Upload", MainController]);
+appEndrollMate.controller("MainController", ["$scope", "$interval", "$timeout", "$q", MainController]);
