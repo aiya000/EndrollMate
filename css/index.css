@@ -7,10 +7,6 @@ body {
     overflow: hidden;
 }
 
-#input_form {
-    float: left;
-}
-
 .numeric_textarea {
     text-align: right;
     width: 50px;
@@ -32,19 +28,13 @@ body {
     float: left;
 }
 
-#credit_lines {
-    list-style: none;
-}
-
 #portrait {
     height: 30%;
     width: 60%;
     float: right;
 }
 
-/* NOTE: could not function */
 #end_message {
-    margin: 0 auto;
 }
 
 .marquee_area {

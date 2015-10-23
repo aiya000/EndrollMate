@@ -19,7 +19,7 @@
         <script src="./js/index.js"></script>
     </head>
     <body ng-controller="MainController as ctrl" ng-init="endrollStarted=false">
-        <div id="input_form" ng-hide="endrollStarted">
+        <div ng-hide="endrollStarted">
             <form novalidate>
                 バックグラウンドイメージを選択してください.<br>
                 <button accept="image/*" ngf-select="ctrl.setBackgroundImage($files)">select an image</button><br><br>
@@ -65,7 +65,6 @@
             </form>
         </div>
 
-        <!--TODO: <div id="credits" class="marquee_area" ng-show="endrollStarted">-->
         <div id="credits" class="marquee_area">
             <p ng-bind="creditLine" ng-style="creditsCSSStyle" ng-repeat="creditLine in creditLines track by $index"></p>
         </div>
