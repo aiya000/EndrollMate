@@ -3,14 +3,14 @@
 /// <reference path="./jquery.keyframes.d.ts/typings/jquery.keyframes.d.ts"/>
 /// <reference path="./Control/CSS/Keyframes.ts"/>
 /// <reference path="./Data/Maybe/Maybe.ts"/>
-/// <reference path="./Data/CSS/FontColorCSS.ts"/>
+/// <reference path="./Data/CSS/FontCSS.ts"/>
 /// <reference path="./MainScope.ts"/>
 /// <reference path="./Util.ts"/>
 
-import IPromise       = ng.IPromise;
-import IDeferred      = ng.IDeferred;
-import Maybe          = Data.Maybe.Maybe;
-import FontColorCSS   = Data.CSS.FontColorCSS;
+import IPromise  = ng.IPromise;
+import IDeferred = ng.IDeferred;
+import Maybe     = Data.Maybe.Maybe;
+import FontCSS   = Data.CSS.FontCSS;
 
 
 /**
@@ -60,7 +60,7 @@ class MainController {
 	 * 使用するAngularJSのオブジェクトを受け取ります
 	 * @constructor
 	 */
-		constructor($scope: MainScope, $interval: ng.IIntervalService, $timeout: ng.ITimeoutService, $q: ng.IQService) {
+	constructor($scope: MainScope, $interval: ng.IIntervalService, $timeout: ng.ITimeoutService, $q: ng.IQService) {
 		this.$scope    = $scope;
 		this.$interval = $interval;
 		this.$timeout  = $timeout;
@@ -112,7 +112,10 @@ class MainController {
 		}
 		this.$scope.endrollStarted = true;
 		this.implantBackgroundImage();
-		this.$scope.creditsCSSStyle = new FontColorCSS({ color: this.$scope.creditsFontColor });
+		this.$scope.aCreditCSSStyle = new FontCSS({
+			"color":     this.$scope.creditsFontColor,
+			"font-size": this.$scope.creditsFontSize
+		});
 
 		let endrollPicturePromise: IPromise<void> = this.startDrawingPortraits();
 		let endrollCreditsPromise: IPromise<void> = this.startRisingCreditLines();
