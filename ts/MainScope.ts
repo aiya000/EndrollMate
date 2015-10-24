@@ -41,7 +41,7 @@ interface MainScope extends ng.IScope {
 	/**
 	 * エンドロールテキストの各アイテムのCSSを表します。
 	 */
-	aCreditCSSStyle: FontCSS;
+	aCreditCSS: FontCSS;
 
 	/**
 	 * エンドロールが既に始まっているか否かを示します。

@@ -112,7 +112,7 @@ class MainController {
 		}
 		this.$scope.endrollStarted = true;
 		this.implantBackgroundImage();
-		this.$scope.aCreditCSSStyle = new FontCSS({
+		this.$scope.aCreditCSS = new FontCSS({
 			"color":     this.$scope.creditsFontColor,
 			"font-size": this.$scope.creditsFontSize
 		});
