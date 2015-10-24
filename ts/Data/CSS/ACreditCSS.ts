@@ -1,8 +1,9 @@
 namespace Data.CSS {
 	/**
-	 * @classdesc (interface) Fontに関するCSSを表します
+	 * {#credits p}のng-styleにインスタンスをバインドしてください。
+	 * @classdesc (interface) index.htmlの{#credits p}に対するCSSを表します
 	 */
-	export interface FontCSSType {
+	export interface ACreditCSS {
 		/**
 		 * cssのcolor属性を表します。
 		 */

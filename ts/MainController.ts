@@ -1,16 +1,16 @@
 /// <reference path="./typings/jquery/jquery.d.ts"/>
 /// <reference path="./typings/ng-file-upload/ng-file-upload.d.ts"/>
-/// <reference path="./jquery.keyframes.d.ts/typings/jquery.keyframes.d.ts"/>
-/// <reference path="./Control/CSS/Keyframes.ts"/>
+/// <reference path="./typings/jquery.keyframes.d.ts/typings/jquery.keyframes.d.ts"/>
+/// <reference path="./Data/Model/MainScope.ts"/>
 /// <reference path="./Data/Maybe/Maybe.ts"/>
-/// <reference path="./Data/CSS/FontCSS.ts"/>
-/// <reference path="./MainScope.ts"/>
-/// <reference path="./Util.ts"/>
+/// <reference path="./Data/CSS/ACreditCSS.ts"/>
+/// <reference path="./Module/MainControllerModule.ts"/>
 
-import IPromise  = ng.IPromise;
-import IDeferred = ng.IDeferred;
-import Maybe     = Data.Maybe.Maybe;
-import FontCSS   = Data.CSS.FontCSS;
+import MainScope  = Data.Model.MainScope;
+import Maybe      = Data.Maybe.Maybe;
+import ACreditCSS = Data.CSS.ACreditCSS;
+import IPromise   = ng.IPromise;
+import IDeferred  = ng.IDeferred;
 
 
 /**
@@ -112,15 +112,15 @@ class MainController {
 		}
 		this.$scope.endrollStarted = true;
 		this.implantBackgroundImage();
-		this.$scope.aCreditCSS = new FontCSS({
+		this.$scope.aCreditCSS = {
 			"color":     this.$scope.creditsFontColor,
 			"font-size": this.$scope.creditsFontSize
-		});
+		};
 
 		let endrollPicturePromise: IPromise<void> = this.startDrawingPortraits();
 		let endrollCreditsPromise: IPromise<void> = this.startRisingCreditLines();
 		this.$q.all([endrollPicturePromise, endrollCreditsPromise]).then(() => {
-			let [fadeMillis, viewMillis]: [number, number] = Util.splitFadeAndViewMillis(this.$scope.endMessageViewSec * 1000.0);
+			let [fadeMillis, viewMillis]: [number, number] = Module.splitFadeAndViewMillis(this.$scope.endMessageViewSec * 1000.0);
 			this.$scope.endrollFinished = true;
 			$("#end_message").css({
 				"font-size" : this.$scope.endMessageFontSize + "px",
@@ -175,7 +175,7 @@ class MainController {
 		// 実際this.$scope.aPortraitDrawSpeedは
 		// 「エンドロールピクチャのうちの1つのピクチャ(=portrait)を描画するための時間」だ
 		// this.portraitsのうちdrawnPortraitNum番目の画像をthis.$scope.aPortraitDrawSpeedミリ秒描画します
-		let [fadeMillis, viewMillis]: [number, number] = Util.splitFadeAndViewMillis(this.$scope.aPortraitDrawSpeed);
+		let [fadeMillis, viewMillis]: [number, number] = Module.splitFadeAndViewMillis(this.$scope.aPortraitDrawSpeed);
 		let drawnPortraitNum: number       = 0;  // 描画済みの画像の数
 		let drawPortraits: Function        = () => this.drawAPortrait(this.portraits[drawnPortraitNum++], fadeMillis, viewMillis);
 		let drawSpeedIncludeMargin: number = this.$scope.aPortraitDrawSpeed + OPERATION_MARGIN;
@@ -238,7 +238,7 @@ class MainController {
 	 * スクロールは下から上へ行われます。
 	 */
 	private startScrollCredits() {
-		Control.CSS.defineMarqueeAnimation(this.SCROLL_ANIMATION_NAME, $("#credits").children().length);
+		Module.defineMarqueeAnimation(this.SCROLL_ANIMATION_NAME, $("#credits").children().length);
 		// エンドロールテキストのスクロールにかける時間
 		// (scrollFullTime秒後にテキストは流れきります)
 		let scrollFullTime: number = this.$scope.creditsRiseSpeed;
